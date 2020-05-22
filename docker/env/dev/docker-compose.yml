@@ -1,0 +1,53 @@
+version: '3'
+services:
+
+  #PHP Service
+  app:
+    build:
+      context: ../../
+      dockerfile: src/backend/Dockerfile
+    image: sphp
+    container_name: app
+#   restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    volumes:
+      - ../../../:/apps/leash
+      - ../../../docker/src/backend/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    networks:
+      - app-network
+
+  #Nginx Service
+#  webserver:
+#    image: nginx:alpine
+#    container_name: webserver
+#    restart: unless-stopped
+#    tty: true
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - ./:/var/www
+#      - ./nginx/conf.d/:/etc/nginx/conf.d/
+#    networks:
+#      - app-network
+
+  db:
+    image: postgres:12.2
+    ports:
+      - '18002:5432'
+    environment:
+      POSTGRES_DB: denis
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: example
+    volumes:
+      - /var/lib/docker-data/leash/postgresql:/var/lib/postgresql/
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
