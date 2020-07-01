@@ -33,6 +33,7 @@ class PickData extends CorePart
     public function execute($denis, $message)
     {
         if ($message instanceof EmptyPart) {
+            $this->user_id = $denis->getUserId();
             $denis->transmit($this);
             return null;
         }

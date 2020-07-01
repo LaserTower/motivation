@@ -34,6 +34,7 @@
     30 => 'App\\Providers\\EventServiceProvider',
     31 => 'App\\Providers\\RouteServiceProvider',
     32 => 'App\\Denis\\DenisServiceProvider',
+    33 => 'App\\VKProvider\\VKServiceProvider',
   ),
   'eager' => 
   array (
@@ -57,6 +58,7 @@
     17 => 'App\\Providers\\EventServiceProvider',
     18 => 'App\\Providers\\RouteServiceProvider',
     19 => 'App\\Denis\\DenisServiceProvider',
+    20 => 'App\\VKProvider\\VKServiceProvider',
   ),
   'deferred' => 
   array (

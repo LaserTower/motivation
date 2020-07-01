@@ -66,7 +66,7 @@ class CreatePrototype extends Command
             ]) ,
             new PickData(6,8,'problem_advance','Расскажите подробнее о своей проблеме.'),
             new PickData(7,8,'problem_advance','Что Вас беспокоит? Расскажите подробнее об этом.'),
-            new CallAManager(8,'пора присоединиться к диалогу')
+            new CallAManager(8,'пора присоединиться к диалогу с пользователем #id#')
         ];
 
 

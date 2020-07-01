@@ -46,6 +46,15 @@ services:
       - /var/lib/docker-data/leash/postgresql:/var/lib/postgresql/
     networks:
       - app-network
+  pgadmin:
+    environment:
+      PGADMIN_DEFAULT_EMAIL: php@mail.ru
+      PGADMIN_DEFAULT_PASSWORD: leash
+    ports:
+      - '18003:80'
+    image: dpage/pgadmin4
+    networks:
+      - app-network
 
 #Docker Networks
 networks:

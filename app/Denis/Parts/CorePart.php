@@ -10,7 +10,7 @@ abstract class CorePart
 {
     public $id;
     public $from = 'bot';
-    public $user_id;
+    public $user_id; //
     public $type;
     public $date;
     public $externalData;

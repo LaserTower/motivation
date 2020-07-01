@@ -25,7 +25,7 @@ class Message
         $VKApiClient->messages()->send(
             $this->access_token,
             [
-                'random_id' => rand(100,200),
+                'random_id' => round((time()-1590914070)/4),
                 'peer_id' => $message->user_id,
                 'message' => $message->body
             ]);

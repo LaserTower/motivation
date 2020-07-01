@@ -28,7 +28,6 @@ class VKCallbackApiLongPollExecutorEdit extends VKCallbackApiLongPollExecutor
             foreach ($response[static::EVENTS_UPDATES] as $event) {
                yield $fabric->createEntity($this->group_id, null, $event[static::EVENT_TYPE], $event[static::EVENT_OBJECT]);
             }
-
             $this->last_ts = $response[static::EVENTS_TS];
         } catch (VKLongPollServerKeyExpiredException $e) {
             $this->server = $this->getLongPollServer();

@@ -60,13 +60,17 @@ class Core
     
     public function getVariables()
     {
-        return $this->conversation->payload['variables'];
+        return $this->conversation->getVariables();
+    }
+    
+    public function getUserId()
+    {
+        return $this->conversation->user_id;
     }
 
     public function transmit(CorePart $part)
     {
         $part->from  = 'bot';
-        $part->user_id = $this->conversation->user_id;
         $this->provider->transmit($part);
     }
 }

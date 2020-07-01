@@ -36,6 +36,7 @@ class UserChoice extends CorePart
     function execute($denis, $message)
     {
         if ($message instanceof EmptyPart) {
+            $this->user_id =$denis->getUserId();
             $denis->transmit($this);
             return null;
         }

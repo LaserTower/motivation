@@ -19,7 +19,8 @@ use Illuminate\Database\Eloquent\Model;
 class Conversation extends Model
 {
     protected $table = 'bot_conversations';
-    protected $history;
+    protected $history = [];
+    protected $variables = [];
 
     protected $fillable = [
         'user_id',
@@ -33,6 +34,7 @@ class Conversation extends Model
         parent::boot();
         static::retrieved(function ($model) {
             $model->fillHistory();
+            $model->fillVariables();
         });
     }
 
@@ -43,6 +45,12 @@ class Conversation extends Model
         foreach ($payload['history'] as $entity) {
             $this->history[] = CorePart::fill($entity);
         }
+    }
+
+    protected function fillVariables()
+    {
+        $payload = $this->getAttribute('payload');
+        $this->variables = $payload['variables'] ?? [];
     }
 
     protected $attributes = [
@@ -63,11 +71,15 @@ class Conversation extends Model
     public function saveVariable($key, $value)
     {
         $payload = $this->getAttribute('payload');
-        $variables = $payload['variables'] ?? [];
-        $variables[$key] = $value;
-        $payload['variables'] = $variables;
+        $this->variables[$key] = $value;
+        $payload['variables'] = $this->variables;
         $this->setAttribute('payload', $payload);
         $this->save();
+    }
+
+    public function getVariables()
+    {
+        return $this->variables;
     }
 
     public function lastBotMessage()

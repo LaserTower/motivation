@@ -2,8 +2,6 @@
 
 
 namespace App\Denis\Parts;
-use Illuminate\Support\Facades\Blade;
-use View;
 
 class Message extends CorePart
 {
@@ -37,6 +35,7 @@ class Message extends CorePart
         });
         
         $this->body  = str_replace(array_keys($variables), array_values($variables),  $this->body);
+        $this->user_id =$denis->getUserId();
         $denis->transmit($this);
         return $this->next;
     }
