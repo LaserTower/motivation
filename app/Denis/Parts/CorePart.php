@@ -4,13 +4,13 @@
 namespace App\Denis\Parts;
 
 
-use App\Denis\Core;
+use App\Denis\Models\Conversation;
 
 abstract class CorePart
 {
     public $id;
     public $from = 'bot';
-    public $user_id; //
+    public $user_id;
     public $type;
     public $date;
     public $externalData;
@@ -23,7 +23,7 @@ abstract class CorePart
         'message-text' => Message::class
     ];
 
-    abstract function execute(Core $denis, ?CorePart $message);
+    abstract function execute($provider, ?CorePart $message,?Conversation $conversation);
 
     public static function fill($data)
     {

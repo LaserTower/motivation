@@ -47,30 +47,9 @@ class Core
                 //todo переход на другой бот  
             }
             $this->conversation->saveEntity($part);
-            $next = $part->execute($this, $message);
+            $next = $part->execute($this->provider, $message, $this->conversation);
             $message = new EmptyPart();
 
         } while (!is_null($next));
-    }
-    
-    public function saveVariable($key, $value)
-    {
-        $this->conversation->saveVariable($key, $value);
-    }
-    
-    public function getVariables()
-    {
-        return $this->conversation->getVariables();
-    }
-    
-    public function getUserId()
-    {
-        return $this->conversation->user_id;
-    }
-
-    public function transmit(CorePart $part)
-    {
-        $part->from  = 'bot';
-        $this->provider->transmit($part);
     }
 }

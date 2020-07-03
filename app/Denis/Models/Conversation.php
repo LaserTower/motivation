@@ -81,6 +81,16 @@ class Conversation extends Model
     {
         return $this->variables;
     }
+    
+    public function getHistory()
+    {
+        return $this->history;
+    }
+
+    public function getUserId()
+    {
+        return $this->conversation->user_id;
+    }
 
     public function lastBotMessage()
     {

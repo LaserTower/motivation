@@ -25,14 +25,14 @@ class CallAManager extends CorePart
         ];
     }
 
-    public function execute($denis, $message)
+    public function execute($provider, $message, $conversation)
     {
         //прям здесь по диалогу определяется кому нужно послать сообщение
         //$manager_id=21142746;
-        $manager_id = 3697315;
+        $manager_id = 33100912;
 
         $variables = [
-            'id' => $denis->getUserId()
+            'id' => $provider->getUserId()
         ];
 
         array_walk($variables, function (&$value) {
@@ -43,7 +43,7 @@ class CallAManager extends CorePart
 
         $newmessage = new Message(0, 0, $this->message);
         $newmessage->user_id = $manager_id;
-        $denis->transmit($newmessage);
+        $provider->transmit($newmessage);
         return null;
     }
 }

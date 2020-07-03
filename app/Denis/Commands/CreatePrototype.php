@@ -37,7 +37,7 @@ class CreatePrototype extends Command
 
     public function handle()
     {
-        $payload = [
+/*        $payload = [
             new Message(1,2,'Здравствуйте! Вы обратились в группу психологической помощи и поддержки.'),
             new PickData(2,3,'name','Как к Вам можно обращаться?'),
             new Message(3,4, 'Приятно познакомиться , #name#'),
@@ -67,10 +67,20 @@ class CreatePrototype extends Command
             new PickData(6,8,'problem_advance','Расскажите подробнее о своей проблеме.'),
             new PickData(7,8,'problem_advance','Что Вас беспокоит? Расскажите подробнее об этом.'),
             new CallAManager(8,'пора присоединиться к диалогу с пользователем #id#')
+        ];*/
+
+        $payload = [
+            new PickData(1,2,'sleep_hour','Сколько часов в день вы спите?'),
+            new UserChoice(2,3,'insomnia_fear','спать мешают страхи?',[
+                1=>'Да',
+                2=>'Нет',
+            ]),
+            new PickData(3,4,'sleep_time','во сколько часов засыпаете?'),
+            new CallAManager(4,'пора присоединиться к диалогу с пользователем #id# на вопрос "Сколько часов в день вы спите?" он ответил #sleep_hour#,на вопрос "спать мешают страхи?"  ответил #insomnia_fear#  на вопрос "во сколько часов засыпаете?" - #sleep_time# ')
         ];
 
 
-        $conversation = PrototypeModel::create(
+       PrototypeModel::create(
             [
                 'name' => 'Prototype',
                 'published' => true,

@@ -29,9 +29,9 @@ class Condition extends CorePart
         ];
     }
 
-    public function execute(Core $denis, $message)
+    public function execute($provider, $message, $conversation)
     {
-        $variables = $denis->getVariables();
+        $variables = $conversation->getVariables();
             
         if(!array_key_exists($this->variable,$variables)){
            return  null;

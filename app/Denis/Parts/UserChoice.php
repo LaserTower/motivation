@@ -33,19 +33,19 @@ class UserChoice extends CorePart
         ];
     }
 
-    function execute($denis, $message)
+    function execute($provider, $message, $conversation)
     {
         if ($message instanceof EmptyPart) {
-            $this->user_id =$denis->getUserId();
-            $denis->transmit($this);
+            $this->user_id = $provider->getUserId();
+            $provider->transmit($this);
             return null;
         }
 
         if($message instanceof Message){
             if(!empty($message->externalData)){
-                $denis->saveVariable($this->variable, $message->externalData[$this->variable]);
+                $conversation->saveVariable($this->variable, $message->externalData[$this->variable]);
             }else{
-                $denis->saveVariable($this->variable, $message->body);
+                $conversation->saveVariable($this->variable, $message->body);
             }
         }
 

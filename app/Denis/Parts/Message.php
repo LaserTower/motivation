@@ -26,17 +26,17 @@ class Message extends CorePart
         ];
     }
 
-    public function execute($denis, $message)
+    public function execute($provider, $message, $conversation)
     {
-        $variables = $denis->getVariables();
+        $variables = $conversation->getVariables();
         
         array_walk($variables,function (&$value){
             return "\{\{$value\}\}";
         });
         
         $this->body  = str_replace(array_keys($variables), array_values($variables),  $this->body);
-        $this->user_id =$denis->getUserId();
-        $denis->transmit($this);
+        $this->user_id =$provider->getUserId();
+        $provider->transmit($this);
         return $this->next;
     }
 }

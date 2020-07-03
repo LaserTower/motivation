@@ -30,16 +30,16 @@ class PickData extends CorePart
         ];
     }
 
-    public function execute($denis, $message)
+    public function execute($provider, $message, $conversation)
     {
         if ($message instanceof EmptyPart) {
-            $this->user_id = $denis->getUserId();
-            $denis->transmit($this);
+            $this->user_id = $provider->getUserId();
+            $provider->transmit($this);
             return null;
         }
         
         if($message instanceof Message){
-            $denis->saveVariable($this->variable, $message->body);
+            $conversation->saveVariable($this->variable, $message->body);
         }
         
         return $this->next;
