@@ -8,9 +8,10 @@ trait ApplyVariables
 {
     public function formatVariables($string, $variables)
     {
-        array_walk($variables, function (&$value) {
-            return "\{$value\}";
-        });
-        return str_replace(array_keys($variables), array_values($variables), $string);
+        $out = [];
+        foreach ($variables as $key=>$val){
+            $out["{{$key}}"]=$val;
+        }
+        return str_replace(array_keys($out), array_values($out), $string);
     }
 }
