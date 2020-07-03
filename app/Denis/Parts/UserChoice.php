@@ -36,7 +36,7 @@ class UserChoice extends CorePart
     function execute($provider, $message, $conversation)
     {
         if ($message instanceof EmptyPart) {
-            $this->user_id = $provider->getUserId();
+            $this->user_id = $conversation->user_id;
             $provider->transmit($this);
             return null;
         }

@@ -79,17 +79,14 @@ class Conversation extends Model
 
     public function getVariables()
     {
-        return $this->variables;
+        $v = $this->variables;
+        $v['id'] = $this->getAttribute('user_id');
+        return $v;
     }
     
     public function getHistory()
     {
         return $this->history;
-    }
-
-    public function getUserId()
-    {
-        return $this->conversation->user_id;
     }
 
     public function lastBotMessage()

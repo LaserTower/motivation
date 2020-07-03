@@ -18,6 +18,22 @@ services:
       - ../../../docker/src/backend/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     networks:
       - app-network
+  chatbot-vk:
+    build:
+      context: ../../
+      dockerfile: src/backend/Dockerfile
+    image: sphp
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    volumes:
+      - ../../../:/apps/leash
+      - ../../../docker/src/backend/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    command: php artisan consumer:vk_waitForUserMessage
+    networks:
+      - app-network
+    
 
   #Nginx Service
 #  webserver:

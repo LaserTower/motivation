@@ -14,7 +14,7 @@ class VKWaitForUserMessage extends Command
      *
      * @var string
      */
-    protected $signature = 'waitForUserMessage';
+    protected $signature = 'consumer:vk_waitForUserMessage';
 
     /**
      * The console command description.

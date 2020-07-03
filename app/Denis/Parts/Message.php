@@ -28,14 +28,8 @@ class Message extends CorePart
 
     public function execute($provider, $message, $conversation)
     {
-        $variables = $conversation->getVariables();
-        
-        array_walk($variables,function (&$value){
-            return "\{\{$value\}\}";
-        });
-        
-        $this->body  = str_replace(array_keys($variables), array_values($variables),  $this->body);
-        $this->user_id =$provider->getUserId();
+        $this->body = $this->formatVariables( $this->body, $conversation->getVariables());
+        $this->user_id = $conversation->user_id;
         $provider->transmit($this);
         return $this->next;
     }

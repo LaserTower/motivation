@@ -3,8 +3,8 @@
 
 namespace App\VKProvider;
 
+use App\Denis\Parts\CallAManager;
 use App\Denis\Parts\CorePart;
-use App\VKProvider\Parts\CallManager;
 use App\VKProvider\Parts\Message;
 use App\VKProvider\Parts\UserChoice;
 use App\VKProvider\Parts\PickData;
@@ -16,7 +16,7 @@ class VkProvider
         'user-choice' => UserChoice::class,
         'pick-data' => PickData::class,
         'message-text' => Message::class,
-        'call-manager' => CallManager::class,
+        'call-manager' => CallAManager::class,
     ];
     protected $access_token;
     protected $group_id;
