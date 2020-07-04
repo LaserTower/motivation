@@ -32,16 +32,25 @@ class PickData extends CorePart
 
     public function execute($provider, $message, $conversation)
     {
-        if ($message instanceof EmptyPart) {
+        $asked = false;
+
+        foreach ($conversation->getHistory() as $item) {
+            if ($item->id == $this->id) {
+                $asked = true;
+                break;
+            }
+        }
+        
+        if (!$asked) {
             $this->user_id = $conversation->user_id;
             $provider->transmit($this);
             return null;
         }
         
-        if($message instanceof Message){
+        if($asked and $message instanceof Message){
             $conversation->saveVariable($this->variable, $message->body);
+            return $this->next;
         }
-        
-        return $this->next;
+        return null;
     }
 }

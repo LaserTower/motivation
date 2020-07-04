@@ -43,7 +43,7 @@ class UserChoice extends CorePart
 
         if($message instanceof Message){
             if(!empty($message->externalData)){
-                $conversation->saveVariable($this->variable, $message->externalData[$this->variable]);
+                $conversation->saveVariable($this->variable, $this->variants[$message->externalData[$this->variable]]);
             }else{
                 $conversation->saveVariable($this->variable, $message->body);
             }

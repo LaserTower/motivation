@@ -46,8 +46,8 @@ class Core
             if ($part->type == 'goto') {
                 //todo переход на другой бот  
             }
-            $this->conversation->saveEntity($part);
             $next = $part->execute($this->provider, $message, $this->conversation);
+            $this->conversation->saveEntity($part);
             $message = new EmptyPart();
 
         } while (!is_null($next));
