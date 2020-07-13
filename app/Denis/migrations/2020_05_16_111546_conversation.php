@@ -15,11 +15,14 @@ class Conversation extends Migration
     {
         Schema::create('bot_conversations', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('player_id')->nullable();
             $table->integer('prototype_id');
+            $table->integer('next_part_id')->default(1);
             $table->text('provider');
-            $table->integer('user_id');
-            $table->jsonb('payload');
-            $table->timestamps(0);
+            $table->integer('provider_user_id');
+            $table->jsonb('part_external_data');
+            $table->timestamp('created_at', 0)->default(\DB::raw('LOCALTIMESTAMP'));
+            $table->timestamp('updated_at', 0)->nullable();
         });
     }
 

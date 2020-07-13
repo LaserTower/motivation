@@ -5,6 +5,7 @@ namespace App\Denis\Commands;
 
 use App\Denis\Constructor;
 use App\Denis\Models\Prototype as PrototypeModel;
+use App\Denis\Parts\Auth;
 use App\Denis\Parts\CallAManager;
 use App\Denis\Parts\Condition;
 use App\Denis\Parts\Message;
@@ -69,7 +70,7 @@ class CreatePrototype extends Command
             new CallAManager(8,'пора присоединиться к диалогу с пользователем #id#')
         ];*/
 
-        $payload = [
+/*        $payload = [
             new Message(1,2,'Здравствуйте! попробуем настроить сон'),
             new UserChoice(2,3,'sleep_hour','Сколько часов в день вы спите?',[
                 1=>'меньше пять часов',
@@ -82,9 +83,12 @@ class CreatePrototype extends Command
             ]),
             new PickData(4,5,'sleep_time','во сколько часов засыпаете?'),
             new CallAManager(5,'пора присоединиться к диалогу с пользователем {id} на вопрос "Сколько часов в день вы спите?" он ответил {sleep_hour},на вопрос "спать мешают страхи?"  ответил {insomnia_fear}  на вопрос "во сколько часов засыпаете?" - {sleep_time} ')
+        ];*/
+
+        $payload = [
+            new Auth(1,2,'предлагаю авторизоваться'),
+            new Message(2,null,'Здравствуйте! попробуем настроить сон'),
         ];
-
-
        PrototypeModel::create(
             [
                 'name' => 'Prototype',

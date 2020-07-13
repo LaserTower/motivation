@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Denis\Commands\RoundRobin;
 use Illuminate\Console\Command;
 
 class WordOfTheDay extends Command
@@ -37,6 +38,26 @@ class WordOfTheDay extends Command
      */
     public function handle()
     {
-        echo 'a state or condition markedly different from the norm'.PHP_EOL;
+        $rr = new RoundRobin();
+
+        $tine=time();
+        echo 'проверяем сообщение'.PHP_EOL;
+        do{
+            if(time()-$tine<15){
+                echo 'создал сообщение'.PHP_EOL;
+            \DB::table('wait_pool')->insert([
+                'provider' => 'vk',
+                'user_id' => 1,
+                'message' => 88
+            ]);}
+            
+            $res=$rr->get_batch();
+            sleep(3);
+            if(!is_null($res)){
+                echo time()-$tine;
+                print_r($res);
+            }
+        }while(time()-$tine<60);
+        echo 'конец';
     }
 }

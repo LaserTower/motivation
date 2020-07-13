@@ -29,8 +29,8 @@ class Message extends CorePart
 
     public function execute($provider, $message, $conversation)
     {
-        $this->body = $this->formatVariables( $this->body, $conversation->getVariables());
-        $this->user_id = $conversation->user_id;
+        $this->body = $this->formatVariables($this->body, $conversation->getVariables());
+        $this->user_id = $conversation->provider_user_id;
         $provider->transmit($this);
         return $this->next;
     }

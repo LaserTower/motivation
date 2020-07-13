@@ -13,17 +13,18 @@ abstract class CorePart
     public $user_id;
     public $type;
     public $date;
-    public $externalData;
+    public $externalData = [];
 
     const BINDINGS = [
         'call-manager' => CallAManager::class,
         'condition' => Condition::class,
         'pick-data' => PickData::class,
         'user-choice' => UserChoice::class,
-        'message-text' => Message::class
+        'message-text' => Message::class,
+        'denis-auth' => Auth::class,
     ];
 
-    abstract function execute($provider, ?CorePart $message,?Conversation $conversation);
+    abstract function execute($provider, $messages,?Conversation $conversation);
 
     public static function fill($data)
     {

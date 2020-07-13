@@ -5,7 +5,7 @@ namespace App\Denis\Parts;
 
 class EmptyPart extends CorePart
 {
-    function execute($provider, ?CorePart $message, $conversation)
+    function execute($provider,  $message, $conversation)
     {
      
     }

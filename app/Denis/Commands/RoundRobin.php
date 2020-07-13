@@ -30,37 +30,25 @@ class RoundRobin extends Command
         $channel->queue_declare('user_ids', false, false, false, false);
         
         while (true){
-            usleep(1000*500);
-            $batch = $this->get_batch();
-            if(is_null($batch)){
+            sleep(1);
+            $batch = \DB::select("select user_id, provider from wait_pool where in_progress=false
+group by user_id,provider
+HAVING max(created_at)<  transaction_timestamp()- (interval '8 second' +   (max(created_at)-min(created_at))/count(created_at))");
+            if(count($batch)<1){
                 continue;
             }
-            [$user_id, $provider] = $batch;
-            $msg = new AMQPMessage(json_encode([
-                'user_id' => $user_id,
-                'prov' => $provider
-            ]));
-            
-            $channel->basic_publish($msg,'','user_ids');
+            foreach ($batch as $row){
+                $user_id = $row->user_id;
+                $provider = $row->provider;
+                \DB::statement("update wait_pool set in_progress=true where user_id=? and provider=?",[$user_id, $provider]);
+                $msg = new AMQPMessage(json_encode([
+                    'user_id' => $user_id,
+                    'prov' => $provider
+                ]));
+                $channel->basic_publish($msg,'','user_ids');
+            }
         }
-        
         $channel->close();
         $connection->close();
-    }
-    
-    public function get_batch()
-    {
-        //1 000 000 это одна секунда
-        $row =  \DB::selectOne("select old.user_id,old.provider
-from wait_pool as old
-         left join wait_pool next on (old.provider = next.provider and old.user_id = next.user_id)
-where old.in_progress=false and (
-      (next.created_at - old.created_at) < interval '3 second'
-   or (old.created_at + interval '3 second') > transaction_timestamp()) limit 1");
-        if(is_null($row)){
-            return null;
-        }
-        \DB::statement("update wait_pool set in_progress=true where user_id=? and provider=?",[$row->user_id,$row->provider]);
-        return [$row->user_id, $row->provider];
     }
 }

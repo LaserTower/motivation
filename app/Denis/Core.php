@@ -26,29 +26,24 @@ class Core
         /** @var Conversation $conversation */
         $this->conversation = Conversation::firstOrCreate(
             [
-                'user_id' => $message->user_id,
+                'provider_user_id' => $message[0]->user_id,
                 'provider' => $this->provider->name
             ],
             [
                 'prototype_id' => config('denis.default_prototype_id.' . $this->provider->name)
             ]);
-        $this->conversation->saveEntity($message);
         $prototype = Prototype::find($this->conversation->prototype_id);
 
-        $entity = $this->conversation->lastBotMessage();
-        if (is_null($entity)) {
-            $next = 1;
-        } else {
-            $next = $entity->id;
-        }
+        $next = $this->conversation->next_part_id ?? 1;
+        
         do {
             $part = $prototype->getPart($next);
             if ($part->type == 'goto') {
                 //todo переход на другой бот  
             }
             $next = $part->execute($this->provider, $message, $this->conversation);
-            $this->conversation->saveEntity($part);
-            $message = new EmptyPart();
+            $this->conversation->saveEntity($part,$next);
+            $message = [new EmptyPart()];
 
         } while (!is_null($next));
     }

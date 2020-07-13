@@ -23,53 +23,34 @@ class Conversation extends Model
     protected $variables = [];
 
     protected $fillable = [
-        'user_id',
+        'player_id',
+        'provider_user_id',
         'provider',
         'prototype_id',
-        'payload'
+        'part_external_data',
+        'next_part_id',
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-        static::retrieved(function ($model) {
-            $model->fillHistory();
-            $model->fillVariables();
-        });
-    }
-
-    protected function fillHistory()
-    {
-        $payload = $this->getAttribute('payload');
-        $this->history = [];
-        foreach ($payload['history'] as $entity) {
-            $this->history[] = CorePart::fill($entity);
-        }
-    }
-
-    protected function fillVariables()
-    {
-        $payload = $this->getAttribute('payload');
-        $this->variables = $payload['variables'] ?? [];
-    }
 
     protected $attributes = [
-        'payload' => '[]',
+        'part_external_data' => '[]',
     ];
+    
     protected $casts = [
-        'payload' => 'array',
+        'part_external_data' => 'array',
     ];
-
-    public function saveEntity(CorePart $message)
+    
+    public function saveEntity(CorePart $part, $next)
     {
-        $payload = $this->getAttribute('payload');
-        $this->history[] = $payload['history'][] = $message;
-        $this->setAttribute('payload', $payload);
+        if(!is_null($next)){
+            $this->setAttribute('next_part_id', $next);
+        }
+        $this->setAttribute('part_external_data', $part->externalData);
         $this->save();
     }
 
     public function saveVariable($key, $value)
     {
+      
         $payload = $this->getAttribute('payload');
         $this->variables[$key] = $value;
         $payload['variables'] = $this->variables;
@@ -99,5 +80,11 @@ class Conversation extends Model
             }
         }
         return $lastEntity;
+    }
+    
+    public function playerConnect(UserCard $userCard)
+    {
+        $this->setAttribute('player_id', $userCard->player_id);
+        $this->save();
     }
 }

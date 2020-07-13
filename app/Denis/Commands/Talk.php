@@ -62,7 +62,10 @@ class Talk extends Command
         $provider = new VkProvider();
         $core = new Core($provider);
         
-        $core->receive($messages);
+        if(count($messages)>0){
+            $core->receive($messages);
+            \DB::statement("delete from  wait_pool where in_progress=true and  user_id=? and provider=?",[$messages[0]->user_id, $provider->name]);
+        }
         return $msg->get('channel')->basic_ack($msg->get('delivery_tag'));
     }
 }
