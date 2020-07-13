@@ -2,13 +2,10 @@ version: '3'
 services:
 
   #PHP Service
-  app:
+  bot_app:
     build:
       context: ../../
       dockerfile: src/backend/Dockerfile
-    image: sphp
-    container_name: app
-#   restart: unless-stopped
     tty: true
     environment:
       SERVICE_NAME: app
@@ -18,21 +15,29 @@ services:
       - ../../../docker/src/backend/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     networks:
       - app-network
-  chatbot-vk:
-    build:
-      context: ../../
-      dockerfile: src/backend/Dockerfile
-    image: sphp
-    tty: true
-    environment:
-      SERVICE_NAME: app
-      SERVICE_TAGS: dev
-    volumes:
-      - ../../../:/apps/leash
-      - ../../../docker/src/backend/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-    command: php artisan consumer:vk_waitForUserMessage
-    networks:
-      - app-network
+
+  bot_rabbitmq:
+      image: rabbitmq:management
+      ports:
+        - '9614:15672'
+      networks:
+        - app-network
+
+#  chatbot-vk:
+#    build:
+#      context: ../../
+#      dockerfile: src/backend/Dockerfile
+#    image: sphp
+#    tty: true
+#    environment:
+#      SERVICE_NAME: app
+#      SERVICE_TAGS: dev
+#    volumes:
+#      - ../../../:/apps/leash
+#      - ../../../docker/src/backend/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+#    command: php artisan consumer:vk_waitForUserMessage
+#    networks:
+#      - app-network
     
 
   #Nginx Service
@@ -50,7 +55,7 @@ services:
 #    networks:
 #      - app-network
 
-  db:
+  bot_db:
     image: postgres:12.2
     ports:
       - '18002:5432'
@@ -59,10 +64,10 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: example
     volumes:
-      - /var/lib/docker-data/leash/postgresql:/var/lib/postgresql/
+      - /var/lib/docker-data/leash/postgresql:/var/lib/postgresql/data
     networks:
       - app-network
-  pgadmin:
+  bot_pgadmin:
     environment:
       PGADMIN_DEFAULT_EMAIL: php@mail.ru
       PGADMIN_DEFAULT_PASSWORD: leash

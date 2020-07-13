@@ -5,6 +5,7 @@ namespace App\Denis\Parts;
 
 class Message extends CorePart
 {
+    use ApplyVariables;
     public $type = 'message-text';
     public $next;
     public $body;

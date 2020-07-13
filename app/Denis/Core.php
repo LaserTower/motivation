@@ -21,7 +21,7 @@ class Core
         $this->provider = $provider;
     }
 
-    public function receive(CorePart $message)
+    public function receive($message)
     {
         /** @var Conversation $conversation */
         $this->conversation = Conversation::firstOrCreate(

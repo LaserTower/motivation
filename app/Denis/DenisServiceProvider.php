@@ -3,6 +3,8 @@
 namespace App\Denis;
 
 use App\Denis\Commands\CreatePrototype;
+use App\Denis\Commands\RoundRobin;
+use App\Denis\Commands\Talk;
 use App\Denis\Commands\waitForUserMessage;
 
 use Illuminate\Support\ServiceProvider;
@@ -34,6 +36,8 @@ class DenisServiceProvider extends ServiceProvider
             $this->loadMigrationsFrom(__DIR__.'/migrations');
             $this->commands([
                 CreatePrototype::class,
+                RoundRobin::class,
+                Talk::class,
             ]);
         }
     }
