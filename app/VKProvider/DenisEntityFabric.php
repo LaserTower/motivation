@@ -4,6 +4,7 @@ namespace App\VKProvider;
 
 
 use App\VKProvider\Input\Callback\MessageNew;
+use App\VKProvider\Input\Callback\Typing;
 
 class DenisEntityFabric
 {
@@ -374,6 +375,8 @@ class DenisEntityFabric
         switch ($type) {
             case static::CALLBACK_EVENT_MESSAGE_NEW:
                 return $this->messageNew($group_id, $secret, $object);
+            case 'message_typing_state':
+                return $this->typing($group_id, $secret, $object);
                 break;
             /* 
                         case static::CALLBACK_EVENT_MESSAGE_REPLY:
@@ -489,6 +492,12 @@ class DenisEntityFabric
     public function messageNew(int $group_id, ?string $secret, array $object)
     {
         $vkMessage = new MessageNew($object);
+        return $vkMessage->createEntity();
+    }
+
+    public function typing(int $group_id, ?string $secret, array $object)
+    {
+        $vkMessage = new Typing($object);
         return $vkMessage->createEntity();
     }
 }

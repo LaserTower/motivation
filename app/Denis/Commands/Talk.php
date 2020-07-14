@@ -3,6 +3,7 @@
 namespace App\Denis\Commands;
 
 use App\Denis\Core;
+use App\Denis\Parts\Typing;
 use App\VKProvider\VkProvider;
 use Illuminate\Console\Command;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -56,7 +57,11 @@ class Talk extends Command
 
         $messages = [];
         foreach ($rows as $row){
-            $messages[] = unserialize($row->message);
+            $temp = unserialize($row->message);
+            if($temp instanceof Typing){
+                continue;
+            }
+            $messages[] = $temp;
         }
         
         $provider = new VkProvider();

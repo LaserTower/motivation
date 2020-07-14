@@ -20,46 +20,6 @@ class UserChoice
     public function transmit(\App\Denis\Parts\CorePart $message)
     {
         $VKApiClient = new VKApiClient();
-
-        $buu = <<<HERE
-{
-    "inline":true,
-    "buttons": [
-        [{
-                "action": {
-                    "type": "text",
-                    "payload": "{\"button\": \"1\"}",
-                    "label": "2Negative"
-                },
-                "color": "negative"
-            },
-            {
-                "action": {
-                    "type": "text",
-                    "payload": "{\"button\": \"2\"}",
-                    "label": "1Positive"
-                },
-                "color": "positive"
-            },
-            {
-                "action": {
-                    "type": "text",
-                    "payload": "{\"button\": \"2\"}",
-                    "label": "3Primary"
-                },
-                "color": "primary"
-            },
-            {
-                "action": {
-                    "type": "text",
-                    "payload": "{\"button\": \"2\"}",
-                    "label": "4Secondary"
-                },
-                "color": "secondary"
-            }
-        ]]
-}
-HERE;
         $buttons = [];
         foreach ($message->variants as $key => $value) {
             $buttons[] = [[

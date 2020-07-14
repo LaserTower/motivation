@@ -16,7 +16,7 @@ class Core
 
     protected $provider;
 
-    public function __construct($provider)
+    public function __construct($provider = null)
     {
         $this->provider = $provider;
     }
@@ -46,5 +46,14 @@ class Core
             $message = [new EmptyPart()];
 
         } while (!is_null($next));
+    }
+
+    public function saveMessage(CorePart $newEntity)
+    {
+        \DB::table('wait_pool')->insert([
+            'provider' => 'vk',
+            'user_id' => $newEntity->user_id,
+            'message' => serialize($newEntity)
+        ]);
     }
 }

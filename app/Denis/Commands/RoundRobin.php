@@ -33,7 +33,7 @@ class RoundRobin extends Command
             sleep(1);
             $batch = \DB::select("select user_id, provider from wait_pool where in_progress=false
 group by user_id,provider
-HAVING max(created_at)<  transaction_timestamp()- (interval '8 second' +   (max(created_at)-min(created_at))/count(created_at))");
+HAVING max(created_at)<  transaction_timestamp()- (interval '5 second' +  (max(created_at)-min(created_at))/count(created_at))");
             if(count($batch)<1){
                 continue;
             }

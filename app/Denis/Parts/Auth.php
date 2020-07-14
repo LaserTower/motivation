@@ -9,6 +9,7 @@ use App\Denis\Models\UserCard;
 
 class Auth extends CorePart
 {
+    use PickDataTrait;
     public $type = 'denis-auth';
     public $next;
     public $body;
@@ -29,27 +30,29 @@ class Auth extends CorePart
             'next' => $this->next
         ];
     }
-    
-    function execute($provider, $messages, ?Conversation $conversation)
+
+    public function askQuestion($provider, $messages, $conversation)
     {
-        $this->user_id = $conversation->user_id;
-        if (array_key_exists('auth', $conversation->part_external_data) 
-            && $conversation->part_external_data['auth'] == 'in_progress') {
-            //проверить email
-            //привязать этот диалог к player_id
-            $userCard = UserCard::firstOrCreate(
-                ['email' => $messages[0]->body],
-                ['email' => $messages[0]->body]
-            );
-            $conversation->playerConnect($userCard);
-            return $this->next;
-        } else {
-            $this->externalData['auth'] = 'in_progress';
-            
-            $message = new Message(null,null,$this->body);
-            $message->user_id = $messages[0]->user_id;
-            $provider->transmit($message);
-            return null;
-        }
+        $message = new Message(null,null,$this->body);
+        $message->user_id = $messages[0]->user_id;
+        $provider->transmit($message);
+        return null;
+    }
+
+    public function checkAnswer($provider, $messages, $conversation)
+    {
+        //проверить email
+        //привязать этот диалог к player_id
+        $userCard = UserCard::firstOrCreate(
+            ['email' => $messages[0]->body],
+            ['email' => $messages[0]->body]
+        );
+        $conversation->playerConnect($userCard);
+        return $this->next;
+    }
+    
+    function execute($provider, $messages, $conversation)
+    {
+        return $this->pickData($provider, $messages, $conversation);
     }
 }

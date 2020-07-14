@@ -2,7 +2,7 @@
 
 namespace App\VKProvider\Commands;
 
-use App\Denis\Parts\CorePart;
+use App\Denis\Core;
 use App\VKProvider\VkProvider;
 use Illuminate\Console\Command;
 
@@ -31,19 +31,11 @@ class VKWaitForUserMessage extends Command
 
     public function handle()
     {
+        $core = new Core();
         $provider = new VkProvider();
         $generator = $provider->handle();
         foreach ($generator as $newEntity) {
-            $this->saveMessage($newEntity);
+            $core->saveMessage($newEntity);
         }
-    }
-
-    protected function saveMessage(CorePart $newEntity)
-    {
-        \DB::table('wait_pool')->insert([
-            'provider' => 'vk',
-            'user_id' => $newEntity->user_id,
-            'message' => serialize($newEntity)
-        ]);
     }
 }

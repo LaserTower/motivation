@@ -37,7 +37,7 @@ class VkProvider
             'group_id' => $this->group_id,
             'enabled' => 1,
             'message_new' => 1,
-            'message_typing_state' => 0,
+            'message_typing_state' => 1,
             'message_allow' => 0,
             'message_reply' => 0,
             'api_version'=>'5.101'

@@ -6,6 +6,7 @@ namespace App\Denis\Parts;
 
 class UserChoice extends CorePart
 {
+    use PickDataTrait;
     public $type = 'user-choice';
     public $question;
     public $variants = [];
@@ -32,23 +33,29 @@ class UserChoice extends CorePart
             'variants' => $this->variants,
         ];
     }
-
-    function execute($provider, $message, $conversation)
+    
+    public function askQuestion($provider, $messages, $conversation)
     {
-        if ($message instanceof EmptyPart) {
-            $this->user_id = $conversation->user_id;
-            $provider->transmit($this);
+        $this->user_id = $conversation->user_id;
+        $provider->transmit($this);
+        return null;
+    }
+
+    public function checkAnswer($provider, $messages, $conversation)
+    {
+        if ($messages[0] instanceof EmptyPart) {
             return null;
         }
-
-        if($message instanceof Message){
-            if(!empty($message->externalData)){
-                $conversation->saveVariable($this->variable, $this->variants[$message->externalData[$this->variable]]);
-            }else{
-                $conversation->saveVariable($this->variable, $message->body);
-            }
+        
+        if(!empty($messages[0]->externalData)){
+            $conversation->saveVariable($this->variable, $this->variants[$messages[0]->externalData[$this->variable]]);
+        }else{
+            $conversation->saveVariable($this->variable, $messages[0]->body);
         }
+    }
 
-        return $this->next;
+    function execute($provider, $messages, $conversation)
+    {
+        return $this->pickData($provider, $messages, $conversation);
     }
 }

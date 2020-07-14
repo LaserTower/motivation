@@ -50,7 +50,6 @@ class Conversation extends Model
 
     public function saveVariable($key, $value)
     {
-      
         $payload = $this->getAttribute('payload');
         $this->variables[$key] = $value;
         $payload['variables'] = $this->variables;
@@ -68,18 +67,6 @@ class Conversation extends Model
     public function getHistory()
     {
         return $this->history;
-    }
-
-    public function lastBotMessage()
-    {
-        $lastEntity = null;
-
-        foreach ($this->history as $entity) {
-            if ($entity->from == 'bot') {
-                $lastEntity = $entity;
-            }
-        }
-        return $lastEntity;
     }
     
     public function playerConnect(UserCard $userCard)

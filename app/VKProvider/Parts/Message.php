@@ -19,7 +19,6 @@ class Message
     
     public function transmit(\App\Denis\Parts\CorePart $message)
     {
-    
         $VKApiClient = new VKApiClient();
 
         $VKApiClient->messages()->send(

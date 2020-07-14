@@ -6,6 +6,7 @@ namespace App\Denis\Parts;
 
 class PickData extends CorePart
 {
+    use PickDataTrait;
     public $type = 'pick-data';
     public $question;
     public $next;
@@ -30,27 +31,30 @@ class PickData extends CorePart
         ];
     }
 
-    public function execute($provider, $message, $conversation)
+    public function askQuestion($provider, $messages, $conversation)
     {
-        $asked = false;
+        $this->user_id = $conversation->user_id;
+        $provider->transmit($this);
+        return null;
+    }
 
-        foreach ($conversation->getHistory() as $item) {
-            if ($item->id == $this->id) {
-                $asked = true;
-                break;
+    public function checkAnswer($provider, $messages, $conversation)
+    {
+        $mess = [];
+        foreach ($messages as $message) {
+            if ($message instanceof Message) {
+                $mess[] = $message->body ;
             }
         }
-        
-        if (!$asked) {
-            $this->user_id = $conversation->user_id;
-            $provider->transmit($this);
-            return null;
+        if(count($mess)<1){
+           return null;
         }
-        
-        if($asked and $message instanceof Message){
-            $conversation->saveVariable($this->variable, $message->body);
-            return $this->next;
-        }
-        return null;
+        $conversation->saveVariable($this->variable, implode(' ',$mess));
+        return $this->next;
+    }
+
+    function execute($provider, $messages, $conversation)
+    {
+        return $this->pickData($provider, $messages, $conversation);
     }
 }
