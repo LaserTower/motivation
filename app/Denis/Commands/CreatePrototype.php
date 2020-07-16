@@ -4,7 +4,7 @@ namespace App\Denis\Commands;
 
 
 use App\Denis\Constructor;
-use App\Denis\Models\Prototype as PrototypeModel;
+use App\Models\Prototype as PrototypeModel;
 use App\Denis\Parts\Auth;
 use App\Denis\Parts\CallAManager;
 use App\Denis\Parts\Condition;

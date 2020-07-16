@@ -46,7 +46,7 @@ class UserChoice extends CorePart
         if ($messages[0] instanceof EmptyPart) {
             return null;
         }
-        
+        $conversation->done = true;
         if(!empty($messages[0]->externalData)){
             $conversation->saveVariable($this->variable, $this->variants[$messages[0]->externalData[$this->variable]]);
         }else{

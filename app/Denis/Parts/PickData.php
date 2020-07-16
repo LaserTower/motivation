@@ -50,6 +50,7 @@ class PickData extends CorePart
            return null;
         }
         $conversation->saveVariable($this->variable, implode(' ',$mess));
+        $conversation->done = true;
         return $this->next;
     }
 

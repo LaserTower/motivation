@@ -48,6 +48,7 @@ class Auth extends CorePart
             ['email' => $messages[0]->body]
         );
         $conversation->playerConnect($userCard);
+        $conversation->done = true;
         return $this->next;
     }
     

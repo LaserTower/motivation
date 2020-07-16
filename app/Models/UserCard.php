@@ -1,9 +1,6 @@
 <?php
 
-
-namespace App\Denis\Models;
-
-
+namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class UserCard extends Model

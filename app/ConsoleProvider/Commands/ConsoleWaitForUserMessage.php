@@ -5,7 +5,7 @@ namespace App\ConsoleProvider\Commands;
 
 
 use App\ConsoleProvider\ConsoleProvider;
-use App\Denis\Core;
+use App\Core;
 
 use Illuminate\Console\Command;
 

@@ -45,7 +45,7 @@ class WordOfTheDay extends Command
         do{
             if(time()-$tine<15){
                 echo 'создал сообщение'.PHP_EOL;
-            \DB::table('wait_pool')->insert([
+            \DB::table('message_pool')->insert([
                 'provider' => 'vk',
                 'user_id' => 1,
                 'message' => 88

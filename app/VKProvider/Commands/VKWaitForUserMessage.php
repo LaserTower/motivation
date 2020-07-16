@@ -2,7 +2,7 @@
 
 namespace App\VKProvider\Commands;
 
-use App\Denis\Core;
+use App\Core;
 use App\VKProvider\VkProvider;
 use Illuminate\Console\Command;
 
@@ -31,7 +31,7 @@ class VKWaitForUserMessage extends Command
 
     public function handle()
     {
-        $core = new Core();
+        $core = new Core('denis','vk');
         $provider = new VkProvider();
         $generator = $provider->handle();
         foreach ($generator as $newEntity) {

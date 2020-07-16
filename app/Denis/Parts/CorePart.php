@@ -11,8 +11,10 @@ abstract class CorePart
     public $id;
     public $from = 'bot';
     public $user_id;
+    public $conversation_id;
     public $type;
     public $date;
+    public $done;
     public $externalData = [];
 
     const BINDINGS = [

@@ -4,7 +4,6 @@
 namespace App\Denis\Models;
 
 
-use App\Denis\Parts\CorePart;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -27,6 +26,7 @@ class Conversation extends Model
         'provider_user_id',
         'provider',
         'prototype_id',
+        'part_done',
         'part_external_data',
         'next_part_id',
     ];
@@ -38,15 +38,6 @@ class Conversation extends Model
     protected $casts = [
         'part_external_data' => 'array',
     ];
-    
-    public function saveEntity(CorePart $part, $next)
-    {
-        if(!is_null($next)){
-            $this->setAttribute('next_part_id', $next);
-        }
-        $this->setAttribute('part_external_data', $part->externalData);
-        $this->save();
-    }
 
     public function saveVariable($key, $value)
     {
@@ -62,11 +53,6 @@ class Conversation extends Model
         $v = $this->variables;
         $v['id'] = $this->getAttribute('user_id');
         return $v;
-    }
-    
-    public function getHistory()
-    {
-        return $this->history;
     }
     
     public function playerConnect(UserCard $userCard)

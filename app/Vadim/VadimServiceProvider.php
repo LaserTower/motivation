@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Denis;
+namespace App\Vadim;
 
-use App\Denis\Commands\CreatePrototype;
-use App\Denis\Commands\RoundRobin;
-use App\Denis\Commands\ChatExec;
-
+use App\Vadim\Commands\CreatePrototype;
+use App\Vadim\Commands\ClockTimer;
+use App\Vadim\Commands\ClockExec;
 use App\Models\Conversation;
 use App\Models\Prototype;
 use Illuminate\Support\ServiceProvider;
 
-class DenisServiceProvider extends ServiceProvider
+class VadimServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -19,8 +18,8 @@ class DenisServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->alias(Conversation::class, "denis.conversation");
-        $this->app->alias(Prototype::class, "denis.prototype");
+        $this->app->alias(Conversation::class, "vadim.conversation");
+        $this->app->alias(Prototype::class, "vadim.prototype");
         $this->mergeConfigFrom(
             __DIR__.'/config.php', 'denis'
         );
@@ -38,8 +37,8 @@ class DenisServiceProvider extends ServiceProvider
             $this->loadMigrationsFrom(__DIR__.'/migrations');
             $this->commands([
                 CreatePrototype::class,
-                RoundRobin::class,
-                ChatExec::class,
+                ClockTimer::class,
+                ClockExec::class,
             ]);
         }
     }

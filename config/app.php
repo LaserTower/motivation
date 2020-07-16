@@ -175,6 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Denis\DenisServiceProvider::class,
+        App\Vadim\VadimServiceProvider::class,
         App\VKProvider\VKServiceProvider::class,
         
 

@@ -8,8 +8,8 @@ trait PickDataTrait
 {
     public function pickData($provider, $messages, $conversation)
     {
-        if(!isset($conversation->part_external_data['pickData'])){
-            $this->externalData['pickData'] = 'in_progress';
+        if($conversation->next_part_id!=$this->id && $conversation->done == true){
+            $conversation->done = false;
             return $this->askQuestion($provider, $messages, $conversation);
         }else{
             return $this->checkAnswer($provider, $messages, $conversation);

@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Denis\Commands;
+namespace App\Vadim\Commands;
 
-use App\Denis\Core;
+use App\Core;
 use App\Denis\Parts\Typing;
 use App\VKProvider\VkProvider;
 use Illuminate\Console\Command;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
-class Talk extends Command
+class ClockExec extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'consumer:bot_step';
+    protected $signature = 'consumer:clockExec';
 
     /**
      * The console command description.
@@ -23,9 +23,7 @@ class Talk extends Command
      * @var string
      */
     protected $description = 'Command description';
-
-
-
+    
     /**
      * принимает номер пользователя для которого нужно выбрать сообщения и выполнить
      *
@@ -36,10 +34,10 @@ class Talk extends Command
     {
         $connection = new AMQPStreamConnection('bot_rabbitmq', 5672, 'guest', 'guest');
         $channel = $connection->channel();
-        $channel->queue_declare('user_ids', false, false, false, false);
+        $channel->queue_declare('clock_exec', false, false, false, false);
         echo " [*] Waiting for messages. To exit press CTRL+C\n";
         
-        $channel->basic_consume('user_ids', 'user_ids', false, false, false, false, [$this,'consume']);
+        $channel->basic_consume('clock_exec', 'clock_exec', false, false, false, false, [$this,'consume']);
 
         while ($channel->is_consuming()) {
             $channel->wait();
@@ -53,7 +51,7 @@ class Talk extends Command
     public function consume($msg)
     {
         $data = json_decode($msg->body,1);
-        $rows =\DB::select('SELECT provider, message FROM wait_pool WHERE user_id=? and provider=?', [$data['user_id'], $data['prov']]);
+        $rows =\DB::select('SELECT provider, message FROM message_pool WHERE user_id=? and provider=?', [$data['user_id'], $data['prov']]);
 
         $messages = [];
         foreach ($rows as $row){
@@ -65,11 +63,11 @@ class Talk extends Command
         }
         
         $provider = new VkProvider();
-        $core = new Core($provider);
+        $core = new Core('denis', $provider);
         
         if(count($messages)>0){
             $core->receive($messages);
-            \DB::statement("delete from  wait_pool where in_progress=true and  user_id=? and provider=?",[$messages[0]->user_id, $provider->name]);
+            \DB::statement("delete from  message_pool where in_progress=true and  user_id=? and provider=?",[$messages[0]->user_id, $provider->name]);
         }
         return $msg->get('channel')->basic_ack($msg->get('delivery_tag'));
     }

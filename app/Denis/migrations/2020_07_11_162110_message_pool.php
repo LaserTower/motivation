@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class WaitPool extends Migration
+class MessagePool extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class WaitPool extends Migration
      */
     public function up()
     {
-        Schema::create('wait_pool', function (Blueprint $table) {
+        Schema::create('message_pool', function (Blueprint $table) {
+            $table->unsignedBigInteger('id',true);
             $table->timestamp('created_at', 2)->default(\DB::raw('LOCALTIMESTAMP'));
-            $table->text('provider');
-            $table->integer('user_id');
+            $table->integer('conversation_id');
             $table->boolean('in_progress')->default(false);
             $table->text('message');
         });
@@ -29,6 +29,6 @@ class WaitPool extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wait_pool');
+        Schema::dropIfExists('message_pool');
     }
 }

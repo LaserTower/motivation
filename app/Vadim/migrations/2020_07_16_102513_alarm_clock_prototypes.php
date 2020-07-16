@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class LiveConnect extends Migration
+class AlarmClockPrototypes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,7 @@ class LiveConnect extends Migration
      */
     public function up()
     {
-        Schema::create('live_connect', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('live_bot_id');
-            $table->text('provider');
-            $table->integer('user_id');
-            $table->timestamps(0);
-        });
+        //
     }
 
     /**
@@ -29,6 +23,6 @@ class LiveConnect extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('live_connect');
+        //
     }
 }
