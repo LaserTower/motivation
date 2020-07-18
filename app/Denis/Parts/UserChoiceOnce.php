@@ -4,22 +4,24 @@
 namespace App\Denis\Parts;
 
 
-class PickData extends CorePart
+class UserChoiceOnce extends CorePart
 {
     use PickDataTrait;
-    public $type = 'pick-data';
+    public $type = 'user-choice';
     public $question;
-    public $next;
+    public $variants = [];
     public $variable;
+    public $next;
 
-    public function __construct($id = null, $next = null, $variable = null, $question = null)
+    public function __construct($id=null, $next=null, $variable=null, $question=null, $variants=null)
     {
         $this->id = $id;
         $this->question = $question;
         $this->next = $next;
         $this->variable = $variable;
+        $this->variants = $variants;
     }
-
+    
     public function constructor()
     {
         return [
@@ -28,9 +30,10 @@ class PickData extends CorePart
             'question' => $this->question,
             'next' => $this->next,
             'variable' => $this->variable,
+            'variants' => $this->variants,
         ];
     }
-
+    
     public function askQuestion($provider, $messages, $conversation)
     {
         $this->user_id = $conversation->user_id;
@@ -40,18 +43,15 @@ class PickData extends CorePart
 
     public function checkAnswer($provider, $messages, $conversation)
     {
-        $mess = [];
-        foreach ($messages as $message) {
-            if ($message instanceof Message) {
-                $mess[] = $message->body ;
-            }
+        if ($messages[0] instanceof EmptyPart) {
+            return null;
         }
-        if(count($mess)<1){
-           return null;
-        }
-        $conversation->saveVariable($this->variable, implode(' ',$mess));
         $conversation->done = true;
-        return $this->next;
+        if(!empty($messages[0]->externalData)){
+            $conversation->saveVariable($this->variable, $this->variants[$messages[0]->externalData[$this->variable]]);
+        }else{
+            $conversation->saveVariable($this->variable, $messages[0]->body);
+        }
     }
 
     function execute($provider, $messages, $conversation)

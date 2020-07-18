@@ -31,11 +31,11 @@ class VKWaitForUserMessage extends Command
 
     public function handle()
     {
-        $core = new Core('denis','vk');
+        $core = new Core();
         $provider = new VkProvider();
         $generator = $provider->handle();
         foreach ($generator as $newEntity) {
-            $core->saveMessage($newEntity);
+            $core->saveMessage('vk',$newEntity);
         }
     }
 }

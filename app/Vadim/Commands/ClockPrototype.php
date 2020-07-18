@@ -2,10 +2,13 @@
 
 namespace App\Vadim\Commands;
 
-use App\Vadim\Constructor;
+
+use App\Vadim\Models\AlarmClockPrototype;
+
+use App\Vadim\Parts\TimerRelativBase;
 use Illuminate\Console\Command;
 
-class CreatePrototype extends Command
+class ClockPrototype extends Command
 {
     /**
      * The name and signature of the console command.
@@ -30,17 +33,18 @@ class CreatePrototype extends Command
     public function handle()
     {
         $payload = [
-          
+          new TimerRelativBase(3,1,'HH:II:SS','-2 hour'),
+          new TimerRelativBase(4,1,'HH:II:SS','-1 hour'),
+          new TimerRelativBase(5,1,'HH:II:SS','-30 min'),
         ];
+ 
         
-        
-        
-       PrototypeModel::create(
+        AlarmClockPrototype::create(
             [
                 'name' => 'Prototype',
                 'published' => true,
                 'payload' => [
-                    'parts' => (new Constructor($payload))->makePrototype() 
+                    'timers' => json_encode($payload)
                 ]
             ]);
     }

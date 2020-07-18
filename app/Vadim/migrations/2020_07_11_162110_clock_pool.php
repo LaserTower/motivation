@@ -16,7 +16,7 @@ class ClockPool extends Migration
         Schema::create('alarm_clock_pool', function (Blueprint $table) {
             $table->integerIncrements('id');
             $table->timestamp('clock_at',0);
-            $table->integer('alarm_clock_list_id');
+            $table->integer('alarm_clock_schedule_id');
             $table->boolean('in_progress')->default(false);
         });
     }

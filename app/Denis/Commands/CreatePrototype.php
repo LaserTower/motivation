@@ -9,8 +9,8 @@ use App\Denis\Parts\Auth;
 use App\Denis\Parts\CallAManager;
 use App\Denis\Parts\Condition;
 use App\Denis\Parts\Message;
-use App\Denis\Parts\PickData;
-use App\Denis\Parts\UserChoice;
+use App\Denis\Parts\PickDataOnce;
+use App\Denis\Parts\UserChoiceOnce;
 use Illuminate\Console\Command;
 
 

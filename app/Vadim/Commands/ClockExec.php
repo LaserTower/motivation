@@ -48,6 +48,13 @@ class ClockExec extends Command
         return;
     }
     
+    public function asdf()
+    {
+        $date = new \DateTime('2006-12-12');
+        $date->modify('+1 day');
+        echo $date->format('Y-m-d');
+    }
+    
     public function consume($msg)
     {
         $data = json_decode($msg->body,1);

@@ -11,7 +11,8 @@ abstract class CorePart
     public $id;
     public $from = 'bot';
     public $user_id;
-    public $conversation_id;
+    public $player_id;
+    public $user_of_provider_id;
     public $type;
     public $date;
     public $done;
@@ -20,8 +21,8 @@ abstract class CorePart
     const BINDINGS = [
         'call-manager' => CallAManager::class,
         'condition' => Condition::class,
-        'pick-data' => PickData::class,
-        'user-choice' => UserChoice::class,
+        'pick-data' => PickDataOnce::class,
+        'user-choice' => UserChoiceOnce::class,
         'message-text' => Message::class,
         'denis-auth' => Auth::class,
     ];

@@ -20,15 +20,14 @@ class Conversation extends Model
     protected $table = 'bot_conversations';
     protected $history = [];
     protected $variables = [];
-
+// диалоги зависят от событий и провайдеров
     protected $fillable = [
-        'player_id',
+        'user_of_provider_id',
         'provider_user_id',
-        'provider',
         'prototype_id',
+        'next_part_id',
         'part_done',
         'part_external_data',
-        'next_part_id',
     ];
 
     protected $attributes = [

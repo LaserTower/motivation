@@ -27,7 +27,7 @@ class RoundRobin extends Command
         $connection = new AMQPStreamConnection('bot_rabbitmq', 5672, 'guest', 'guest');
         $channel = $connection->channel();
 
-        $channel->queue_declare('chat_exec', false, false, false, false);
+        $channel->queue_declare('chat_exec', false, true, false, false);
         
         while (true){
             sleep(1);

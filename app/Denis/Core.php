@@ -8,6 +8,7 @@ use App\Denis\Models\Conversation;
 use App\Denis\Models\Prototype;
 use App\Denis\Parts\CorePart;
 use App\Denis\Parts\EmptyPart;
+use App\Models\UserOfProviders;
 
 class Core
 {
@@ -46,15 +47,20 @@ class Core
         $conversation->save();
     }
 
-    public function saveMessage(CorePart $newEntity)
+    public function saveMessage($provider_name, CorePart $newEntity)
     {
-        $conversation = Conversation::firstOrCreate(
+        $userOfProvidersModel = UserOfProviders::firstOrCreate(
             [
                 'provider_user_id' => $newEntity->user_id,
-                'provider' => $this->provider->name
+                'provider' => $provider_name
+            ]);
+        
+        $conversation = Conversation::firstOrCreate(
+            [
+                'user_of_provider_id'=>$userOfProvidersModel->id
             ],
             [
-                'prototype_id' => config('denis.default_prototype_id.' . $this->provider->name)
+                'prototype_id' => config('denis.default_prototype_id.' . $provider_name)
             ]);
         
         \DB::table('message_pool')->insert([

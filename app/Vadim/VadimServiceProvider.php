@@ -2,11 +2,10 @@
 
 namespace App\Vadim;
 
-use App\Vadim\Commands\CreatePrototype;
+use App\Vadim\Commands\ClockPrototype;
 use App\Vadim\Commands\ClockTimer;
 use App\Vadim\Commands\ClockExec;
-use App\Models\Conversation;
-use App\Models\Prototype;
+
 use Illuminate\Support\ServiceProvider;
 
 class VadimServiceProvider extends ServiceProvider
@@ -18,8 +17,6 @@ class VadimServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->alias(Conversation::class, "vadim.conversation");
-        $this->app->alias(Prototype::class, "vadim.prototype");
         $this->mergeConfigFrom(
             __DIR__.'/config.php', 'denis'
         );
@@ -36,7 +33,7 @@ class VadimServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->loadMigrationsFrom(__DIR__.'/migrations');
             $this->commands([
-                CreatePrototype::class,
+                ClockPrototype::class,
                 ClockTimer::class,
                 ClockExec::class,
             ]);

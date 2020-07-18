@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Conversation extends Migration
+class UsersOfProviders extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class Conversation extends Migration
      */
     public function up()
     {
-        Schema::create('bot_conversations', function (Blueprint $table) {
+        Schema::create('users_of_providers', function (Blueprint $table) {
             $table->unsignedBigInteger('id',true);
-            $table->integer('user_of_provider_id');
-            $table->integer('prototype_id');
-            $table->integer('next_part_id')->default(1);
-            $table->boolean('part_done')->default(true);
-            $table->jsonb('part_external_data');
+            $table->integer('provider_user_id');
+            $table->text('provider');
+            $table->integer('player_id')->nullable();
+            $table->jsonb('variables')->default('[]');
             $table->timestamp('created_at', 0)->default(\DB::raw('LOCALTIMESTAMP'));
             $table->timestamp('updated_at', 0)->nullable();
+            $table->unique(array('provider','provider_user_id'));
         });
     }
 
@@ -32,6 +32,6 @@ class Conversation extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bot_conversations');
+        Schema::dropIfExists('users_of_providers');
     }
 }
