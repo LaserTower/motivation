@@ -3,6 +3,11 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class PlayerCard
+ * @package App\Models
+ * корневая таблица со всеми данными пользователя
+ */
 class PlayerCard extends Model
 {
     protected $table = 'player_card';

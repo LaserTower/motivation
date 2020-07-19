@@ -2,7 +2,8 @@
 
 namespace App\VKProvider\Commands;
 
-use App\Core;
+
+use App\Denis\Core;
 use App\VKProvider\VkProvider;
 use Illuminate\Console\Command;
 

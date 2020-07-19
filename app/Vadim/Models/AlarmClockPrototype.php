@@ -12,7 +12,7 @@ class AlarmClockPrototype extends Model
 
     protected $fillable = [
         'name',
-        'published',
+        'settings_bot_id',
         'payload',
     ];
 

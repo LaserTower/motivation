@@ -15,9 +15,8 @@ class AlarmClockPrototypes extends Migration
     {
         Schema::create('alarm_clock_prototypes', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('settings_bot_id');
             $table->string('name', 100);
-            $table->timestamp('published_at')->nullable(true);
-            $table->boolean('published')->default(false);
             $table->jsonb('payload');
             $table->timestamps(0);
         });

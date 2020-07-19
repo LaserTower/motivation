@@ -6,6 +6,11 @@ use Illuminate\Console\Command;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
+/**
+ * Class ClockTimer
+ * @package App\Vadim\Commands
+ * 
+ */
 class ClockTimer extends Command
 {
     /**

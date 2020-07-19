@@ -17,6 +17,7 @@ class UsersOfProviders extends Migration
             $table->unsignedBigInteger('id',true);
             $table->integer('provider_user_id');
             $table->text('provider');
+            $table->integer('locked_by_conversation_id')->nullable();
             $table->integer('player_id')->nullable();
             $table->jsonb('variables')->default('[]');
             $table->timestamp('created_at', 0)->default(\DB::raw('LOCALTIMESTAMP'));

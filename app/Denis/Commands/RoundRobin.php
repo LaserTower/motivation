@@ -38,12 +38,9 @@ HAVING max(created_at)<  transaction_timestamp()- (interval '5 second' +  (max(c
                 continue;
             }
             foreach ($batch as $row){
-                $user_id = $row->user_id;
-                $provider = $row->provider;
-                \DB::statement("update message_pool set in_progress=true where user_id=? and provider=?",[$user_id, $provider]);
+                \DB::statement("update message_pool set in_progress=true where conversation_id=?",[$row->conversation_id]);
                 $msg = new AMQPMessage(json_encode([
-                    'user_id' => $user_id,
-                    'prov' => $provider
+                    'conversation_id' => $row->conversation_id,
                 ]));
                 $channel->basic_publish($msg,'','chat_exec');
             }

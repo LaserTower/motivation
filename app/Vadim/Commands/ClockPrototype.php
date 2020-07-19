@@ -5,7 +5,7 @@ namespace App\Vadim\Commands;
 
 use App\Vadim\Models\AlarmClockPrototype;
 
-use App\Vadim\Parts\TimerRelativBase;
+use App\Vadim\Parts\TimerRelativeBase;
 use Illuminate\Console\Command;
 
 class ClockPrototype extends Command
@@ -33,16 +33,15 @@ class ClockPrototype extends Command
     public function handle()
     {
         $payload = [
-          new TimerRelativBase(3,1,'HH:II:SS','-2 hour'),
-          new TimerRelativBase(4,1,'HH:II:SS','-1 hour'),
-          new TimerRelativBase(5,1,'HH:II:SS','-30 min'),
+          new TimerRelativeBase(3,'go_to_sleep','-2 hour'),
+          new TimerRelativeBase(4,'go_to_sleep','-1 hour'),
+          new TimerRelativeBase(5,'go_to_sleep','-30 min'),
         ];
- 
         
         AlarmClockPrototype::create(
             [
                 'name' => 'Prototype',
-                'published' => true,
+                'settings_bot_id' => 5,
                 'payload' => [
                     'timers' => json_encode($payload)
                 ]

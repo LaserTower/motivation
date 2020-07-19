@@ -15,7 +15,7 @@ class AlarmClock extends Migration
     {
         Schema::create('alarm_clock_schedule', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('player_id')->nullable();
+            $table->integer('users_of_providers_id')->nullable();
             $table->string('timezone', 100);
             $table->integer('alarm_clock_prototype_id');
             $table->jsonb('clock_external_data');

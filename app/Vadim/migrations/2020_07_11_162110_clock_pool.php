@@ -17,6 +17,7 @@ class ClockPool extends Migration
             $table->integerIncrements('id');
             $table->timestamp('clock_at',0);
             $table->integer('alarm_clock_schedule_id');
+            $table->integer('timer_part_id');
             $table->boolean('in_progress')->default(false);
         });
     }
