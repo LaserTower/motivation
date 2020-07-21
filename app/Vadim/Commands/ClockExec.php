@@ -4,6 +4,9 @@ namespace App\Vadim\Commands;
 
 use App\Core;
 use App\Denis\Parts\Typing;
+use App\Vadim\Models\AlarmClockPool;
+use App\Vadim\Models\AlarmClockSchedule;
+use App\Vadim\Vadim;
 use App\VKProvider\VkProvider;
 use Illuminate\Console\Command;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -48,34 +51,10 @@ class ClockExec extends Command
         return;
     }
     
-    public function asdf()
-    {
-        $date = new \DateTime('2006-12-12');
-        $date->modify('+1 day');
-        echo $date->format('Y-m-d');
-    }
-    
     public function consume($msg)
     {
         $data = json_decode($msg->body,1);
-        $rows =\DB::select('SELECT provider, message FROM message_pool WHERE user_id=? and provider=?', [$data['user_id'], $data['prov']]);
-
-        $messages = [];
-        foreach ($rows as $row){
-            $temp = unserialize($row->message);
-            if($temp instanceof Typing){
-                continue;
-            }
-            $messages[] = $temp;
-        }
-        
-        $provider = new VkProvider();
-        $core = new Core('denis', $provider);
-        
-        if(count($messages)>0){
-            $core->receive($messages);
-            \DB::statement("delete from  message_pool where in_progress=true and  user_id=? and provider=?",[$messages[0]->user_id, $provider->name]);
-        }
+        (new Vadim())->clockExec($data['alarm_clock_pool_id']);
         return $msg->get('channel')->basic_ack($msg->get('delivery_tag'));
     }
 }

@@ -12,14 +12,7 @@ use App\Models\UserOfProviders;
 
 class Core
 {
-    protected $provider;
-
-    public function __construct($provider = null)
-    {
-        $this->provider = $provider;
-    }
-
-    public function receive($message)
+    public function receive($provider, $message)
     {
         $conversation = Conversation::find($message->conversation_id);
         $prototype = Prototype::find($conversation->prototype_id);
@@ -31,11 +24,15 @@ class Core
             if ($part->type == 'goto') {
                 //todo переход на другой бот  
             }
-            $next = $part->execute($this->provider, $message, $conversation);
+            $next = $part->execute($provider, $message, $conversation);
             $this->saveEntity($conversation, $part, $next);
             $message = [new EmptyPart()];
 
         } while (!is_null($next));
+        //как определить конец диалога - next=null и удовлетворённый part
+        if (is_null($next) && $part->done) {
+            $this->endOfConversation($conversation);
+        }
     }
 
     public function saveEntity($conversation, CorePart $part, $next)
@@ -43,7 +40,7 @@ class Core
         if (!is_null($next)) {
             $conversation->next_part_id = $next;
         }
-        $conversation->part_external_data = $part->externalData;
+        $conversation->part_external_data[$part->id] = $part->externalData;
         $conversation->save();
     }
 
@@ -70,19 +67,29 @@ class Core
         ]);
     }
 
-    public function attachConversation($userOfProvidersModel, $conversation)
+    public function attachConversation($userOfProvidersModel, $conversationModel)
     {
         if (is_null($userOfProvidersModel->locked_by_conversation_id)) {
-            $conversation->save();
-            $conversation->refresh();
+            $conversationModel->save();
+            $conversationModel->refresh();
             //это самое первое сообщение
-            $userOfProvidersModel->locked_by_conversation_id = $conversation->id;
+            $userOfProvidersModel->locked_by_conversation_id = $conversationModel->id;
             $userOfProvidersModel->save();
+            return true;
+        } else {
+            return false;
         }
 
 
         //если в очереди есть сообщения для того бота что уже выполняется то придётся подождать
 
         //если не вышел таймаут прошлого бота тоже подожди
+    }
+    
+    protected function endOfConversation($conversation)
+    {
+        UserOfProviders::where('locked_by_conversation_id', $conversation->id)->update([
+            'locked_by_conversation_id' => null
+        ]);
     }
 }

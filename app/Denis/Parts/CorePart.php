@@ -15,14 +15,14 @@ abstract class CorePart
     public $user_of_provider_id;
     public $type;
     public $date;
-    public $done;
+    public $done = true;
     public $externalData = [];
 
     const BINDINGS = [
         'call-manager' => CallAManager::class,
         'condition' => Condition::class,
-        'pick-data' => PickDataOnce::class,
-        'user-choice' => UserChoiceOnce::class,
+        'pick-data' => PickData::class,
+        'user-choice' => UserChoice::class,
         'message-text' => Message::class,
         'denis-auth' => Auth::class,
     ];

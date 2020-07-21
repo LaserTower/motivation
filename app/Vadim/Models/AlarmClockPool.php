@@ -15,5 +15,7 @@ class AlarmClockPool extends Model
         'alarm_clock_schedule_id',
         'timer_part_id',
         'in_progress',
+        'users_of_providers_id',
+        'player_id'
     ];
 }

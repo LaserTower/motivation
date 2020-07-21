@@ -23,10 +23,8 @@ class Conversation extends Model
 // диалоги зависят от событий и провайдеров
     protected $fillable = [
         'user_of_provider_id',
-        'provider_user_id',
         'prototype_id',
         'next_part_id',
-        'part_done',
         'part_external_data',
     ];
 

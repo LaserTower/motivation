@@ -18,7 +18,6 @@ class Conversation extends Migration
             $table->integer('user_of_provider_id');
             $table->integer('prototype_id');
             $table->integer('next_part_id')->default(1);
-            $table->boolean('part_done')->default(true);
             $table->jsonb('part_external_data')->default('[]');
             $table->timestamp('created_at', 0)->default(\DB::raw('LOCALTIMESTAMP'));
             $table->timestamp('updated_at', 0)->nullable();

@@ -2,14 +2,16 @@
 
 namespace App\Vadim\Commands;
 
+use App\Vadim\Models\AlarmClockPool;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 /**
  * Class ClockTimer
  * @package App\Vadim\Commands
- * 
+ *
  */
 class ClockTimer extends Command
 {
@@ -26,33 +28,30 @@ class ClockTimer extends Command
      * @var string
      */
     protected $description = 'Command description';
-    
+
     public function handle()
     {
         $connection = new AMQPStreamConnection('bot_rabbitmq', 5672, 'guest', 'guest');
         $channel = $connection->channel();
 
         $channel->queue_declare('clock_exec', false, false, false, false);
-        
-        while (true){
+
+        while (true) {
             sleep(60);
             //следующий межминутный интервал
             
-            $batch = \DB::select("select id,player_id from clock_pool  where in_progress=false and clock_at < transaction_timestamp()");
-            if(count($batch)<1){
+            $pool = AlarmClockPool::where('in_progress', false)->whereRaw('extract(\'epoch\' from (timestamp transaction_timestamp() - timestamp "clock_at"))::integer % 86400 < 60')->get();
+            if ($pool->count() == 0) {
                 continue;
             }
-            $players = [];
-           
             
-            foreach ($batch as $playerid){
-               
-                \DB::statement("update clock_pool set in_progress=true where id in ?",[$ids]);
+            foreach ($pool as $timer) {
                 $msg = new AMQPMessage(json_encode([
-                    'player' => $playerid,
-                    'ids' => $ids
+                    'alarm_clock_pool_id' => $timer->id
                 ]));
-                $channel->basic_publish($msg,'','clock_exec');
+                $channel->basic_publish($msg, '', 'clock_exec');
+                $timer->in_progress = true;
+                $timer->save();
             }
         }
         $channel->close();
