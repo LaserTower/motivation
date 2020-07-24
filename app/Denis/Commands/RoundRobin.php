@@ -31,8 +31,8 @@ class RoundRobin extends Command
         
         while (true){
             sleep(1);
-            $batch = \DB::select("select user_id, provider from message_pool where in_progress=false
-group by user_id,provider
+            $batch = \DB::select("select conversation_id from message_pool where in_progress=false
+group by conversation_id
 HAVING max(created_at)<  transaction_timestamp()- (interval '5 second' +  (max(created_at)-min(created_at))/count(created_at))");
             if(count($batch)<1){
                 continue;

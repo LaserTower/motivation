@@ -27,8 +27,12 @@ class MessageNew
         }
     }
 
-    public function createEntity(): Message
+    public function createEntity(): ?Message
     {
+        if($this->from_id<0){
+            //сообщение от группы
+            return null;
+        }
         $message = new Message(0, 0, $this->text);
         $message->from = 'user';
         $message->date = $this->date;

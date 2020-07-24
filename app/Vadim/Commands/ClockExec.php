@@ -55,6 +55,6 @@ class ClockExec extends Command
     {
         $data = json_decode($msg->body,1);
         (new Vadim())->clockExec($data['alarm_clock_pool_id']);
-        return $msg->get('channel')->basic_ack($msg->get('delivery_tag'));
+        $msg->get('channel')->basic_ack($msg->get('delivery_tag'));
     }
 }

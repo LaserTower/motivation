@@ -7,7 +7,7 @@ use App\Denis\Core;
 use App\Denis\Models\Conversation;
 use App\Models\UserOfProviders;
 use App\Vadim\Models\AlarmClockPool;
-use App\Vadim\Models\AlarmClockPrototype;
+use App\Vadim\Models\ImproveProgramPrototype;
 use App\Vadim\Models\AlarmClockSchedule;
 use App\Vadim\Parts\TimerRelativeBase;
 use Illuminate\Support\Facades\DB;
@@ -46,7 +46,7 @@ class Vadim
     public function deployTimers($alarm_clock_schedule_id)
     {
         $scheduler = AlarmClockSchedule::find($alarm_clock_schedule_id);
-        $prototype = AlarmClockPrototype::find($scheduler->alarm_clock_prototype_id);
+        $prototype = ImproveProgramPrototype::find($scheduler->alarm_clock_prototype_id);
         $timers = [];
         foreach ($prototype->payload['timers'] as $raw) {
             $timers[] = $this->gyrate($raw);
@@ -70,15 +70,18 @@ class Vadim
 
         if ($schedulerModel->clock_external_data['mode'] == 'setup') {
             if($this->setupTimerConversation($schedulerModel)){
-                $schedulerModel->clock_external_data['mode'] = 'run';
+                $temp = $schedulerModel->clock_external_data;
+                $temp['mode'] = 'run';
+                $schedulerModel->clock_external_data=$temp;
                 $schedulerModel->save();
+                //$clockTimer->delete();
             }
         }
 
         
-        $clockPrototype=AlarmClockPrototype::find($schedulerModel->alarm_clock_prototype_id);
+        $clockPrototype=ImproveProgramPrototype::find($schedulerModel->alarm_clock_prototype_id);
 
-        $f=$clockPrototype->payload[$clockTimer->timer_part_id];
+        $prototype_id=$clockPrototype->payload['timers'][$clockTimer->timer_part_id]['bot_id'];
         //как получить номер бота для создания 'prototype_id'
       
         
@@ -86,7 +89,7 @@ class Vadim
             $userOfProvidersModel = UserOfProviders::find($schedulerModel->users_of_providers_id);
             $conversationModel = Conversation::create([
                 'user_of_provider_id' => $schedulerModel->users_of_providers_id,
-                'prototype_id' => 'prototype_id',
+                'prototype_id' => $prototype_id,
                 'next_part_id' => 1,
             ]);
             return (new Core())->attachConversation($userOfProvidersModel, $conversationModel);
@@ -95,13 +98,13 @@ class Vadim
 
     public function setupTimerConversation($schedulerModel)
     {
-        $clockPrototypeModel = AlarmClockPrototype::find($schedulerModel->alarm_clock_prototype_id);
+        $clockPrototypeModel = ImproveProgramPrototype::find($schedulerModel->alarm_clock_prototype_id);
         
         $conversationModel = Conversation::create([
             'user_of_provider_id' => $schedulerModel->users_of_providers_id,
             'prototype_id' => $clockPrototypeModel->settings_bot_id,
             'next_part_id' => 1,
-            'part_external_data'=>['scheduler_id'=>$schedulerModel->id]
+            'parent_schedule_id' => $schedulerModel->id
         ]);
         $conversationModel->refresh();
         $userOfProvidersModel = UserOfProviders::find($schedulerModel->users_of_providers_id);

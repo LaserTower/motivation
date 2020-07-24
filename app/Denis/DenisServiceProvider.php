@@ -6,6 +6,7 @@ use App\Denis\Commands\CreatePrototype;
 use App\Denis\Commands\RoundRobin;
 use App\Denis\Commands\ChatExec;
 
+use App\Denis\Commands\StartUpConversation;
 use App\Denis\Models\Conversation;
 use App\Denis\Models\Prototype;
 use Illuminate\Support\ServiceProvider;
@@ -40,6 +41,7 @@ class DenisServiceProvider extends ServiceProvider
                 CreatePrototype::class,
                 RoundRobin::class,
                 ChatExec::class,
+                StartUpConversation::class,
             ]);
         }
     }

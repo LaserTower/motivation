@@ -6,9 +6,9 @@ namespace App\Vadim\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AlarmClockPrototype extends Model
+class ImproveProgramPrototype extends Model
 {
-    protected $table = 'alarm_clock_prototypes';
+    protected $table = 'improve_program_prototypes';
 
     protected $fillable = [
         'name',

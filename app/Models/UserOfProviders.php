@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class UserOfProviders
  * @package App\Models
- * 
+ *
  */
 class UserOfProviders extends Model
 {
     protected $table = 'users_of_providers';
-    
+
     protected $fillable = [
         'provider',
         'provider_user_id',
@@ -28,4 +28,18 @@ class UserOfProviders extends Model
     protected $casts = [
         'variables' => 'array',
     ];
+
+    public function getVariables(): array
+    {
+        if (is_null($this->player_id)) {
+            return $this->getAttribute('variables');
+        }
+    }
+
+    public function saveVariable($key, $value)
+    {
+        $var = $this->getAttribute('variables');
+        $var[$key] = $value;
+        $this->setAttribute('variables', $var);
+    }
 }

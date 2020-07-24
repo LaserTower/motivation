@@ -17,6 +17,7 @@ class Conversation extends Migration
             $table->unsignedBigInteger('id',true);
             $table->integer('user_of_provider_id');
             $table->integer('prototype_id');
+            $table->integer('parent_schedule_id');
             $table->integer('next_part_id')->default(1);
             $table->jsonb('part_external_data')->default('[]');
             $table->timestamp('created_at', 0)->default(\DB::raw('LOCALTIMESTAMP'));

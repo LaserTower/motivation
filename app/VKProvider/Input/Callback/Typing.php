@@ -18,6 +18,10 @@ class Typing
 
     public function createEntity()
     {
+        if($this->from_id<0){
+            //сообщение от группы
+            return null;
+        }
         $message = new \App\Denis\Parts\Typing();
         $message->from = 'user';
         $message->user_id = $this->from_id;

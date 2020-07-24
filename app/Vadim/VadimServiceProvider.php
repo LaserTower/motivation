@@ -2,6 +2,7 @@
 
 namespace App\Vadim;
 
+use App\Vadim\Commands\AttachProgram;
 use App\Vadim\Commands\ClockPrototype;
 use App\Vadim\Commands\ClockTimer;
 use App\Vadim\Commands\ClockExec;
@@ -36,6 +37,7 @@ class VadimServiceProvider extends ServiceProvider
                 ClockPrototype::class,
                 ClockTimer::class,
                 ClockExec::class,
+                AttachProgram::class,
             ]);
         }
     }

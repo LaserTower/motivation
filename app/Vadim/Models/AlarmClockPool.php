@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class AlarmClockPool extends Model
 {
     protected $table = 'alarm_clock_pool';
+
+    public $timestamps = false;
     
     protected $fillable = [
         'clock_at',

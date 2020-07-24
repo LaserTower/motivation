@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Denis\Parts;
 
 class Message extends CorePart
@@ -29,8 +28,8 @@ class Message extends CorePart
 
     public function execute($provider, $message, $conversation)
     {
+        $this->user_id = $conversation->userId();
         $this->body = $this->formatVariables($this->body, $conversation->getVariables());
-        $this->user_id = $conversation->provider_user_id;
         $provider->transmit($this);
         return $this->next;
     }

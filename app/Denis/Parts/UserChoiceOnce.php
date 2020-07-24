@@ -4,16 +4,17 @@
 namespace App\Denis\Parts;
 
 
-class UserChoice extends CorePart
+class UserChoiceOnce extends CorePart
 {
     use PickDataTrait;
-    public $type = 'user-choice';
+
+    public $type = 'user-choice-once';
     public $question;
     public $variants = [];
     public $variable;
     public $next;
 
-    public function __construct($id=null, $next=null, $variable=null, $question=null, $variants=null)
+    public function __construct($id = null, $next = null, $variable = null, $question = null, $variants = null)
     {
         $this->id = $id;
         $this->question = $question;
@@ -21,7 +22,7 @@ class UserChoice extends CorePart
         $this->variable = $variable;
         $this->variants = $variants;
     }
-    
+
     public function constructor()
     {
         return [
@@ -33,7 +34,7 @@ class UserChoice extends CorePart
             'variants' => $this->variants,
         ];
     }
-    
+
     public function askQuestion($provider, $messages, $conversation)
     {
         $this->user_id = $conversation->user_id;
@@ -46,16 +47,21 @@ class UserChoice extends CorePart
         if ($messages[0] instanceof EmptyPart) {
             return null;
         }
-        $conversation->done = true;
-        if(!empty($messages[0]->externalData)){
-            $conversation->saveVariable($this->variable, $this->variants[$messages[0]->externalData[$this->variable]]);
-        }else{
-            $conversation->saveVariable($this->variable, $messages[0]->body);
+
+        if (!empty($messages[0]->externalData)) {
+            $this->savePartVariable($conversation, $this->variable, $this->variants[$messages[0]->externalData[$this->variable]]);
+        } else {
+            $this->savePartVariable($conversation, $this->variable, $messages[0]->body);
         }
     }
 
     function execute($provider, $messages, $conversation)
     {
         return $this->pickData($provider, $messages, $conversation);
+    }
+
+    public function savePartVariable($conversation, $key, $value)
+    {
+        $conversation->saveVariable($key, $value, false);
     }
 }

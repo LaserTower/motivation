@@ -2,8 +2,11 @@
 
 namespace App\Denis\Commands;
 
-use App\Core;
+use App\Denis\Core;
+use App\Denis\Models\Conversation;
+use App\Denis\Models\MessagePool;
 use App\Denis\Parts\Typing;
+use App\Models\UserOfProviders;
 use App\VKProvider\VkProvider;
 use Illuminate\Console\Command;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -36,7 +39,7 @@ class ChatExec extends Command
     {
         $connection = new AMQPStreamConnection('bot_rabbitmq', 5672, 'guest', 'guest');
         $channel = $connection->channel();
-        $channel->queue_declare('chat_exec', false, false, false, false);
+        $channel->queue_declare('chat_exec', false, true, false, false);
         echo " [*] Waiting for messages. To exit press CTRL+C\n";
         
         $channel->basic_consume('chat_exec', 'chat_exec', false, false, false, false, [$this,'consume']);
@@ -53,23 +56,29 @@ class ChatExec extends Command
     public function consume($msg)
     {
         $data = json_decode($msg->body,1);
-        $rows =\DB::select('SELECT provider, message FROM message_pool WHERE user_id=? and provider=?', [$data['user_id'], $data['prov']]);
-
+        $rows =\DB::select('SELECT id,message FROM message_pool WHERE conversation_id=? ', [$data['conversation_id']]);
+        $conversation = Conversation::find($data['conversation_id']);
+        $userOfProvider = UserOfProviders::find($conversation->user_of_provider_id);
         $messages = [];
-        foreach ($rows as $row){
+        $ids=[];
+        foreach ($rows as $row) {
+            $ids[]=$row->id;
             $temp = unserialize($row->message);
-            if($temp instanceof Typing){
+            if ($temp instanceof Typing) {
                 continue;
             }
             $messages[] = $temp;
         }
         
-        $provider = new VkProvider();
-        $core = new Core('denis', $provider);
+        $providers=[
+            'vk'=>new VkProvider()
+        ];
+        
+        $core = new Core();
         
         if(count($messages)>0){
-            $core->receive($messages);
-            \DB::statement("delete from message_pool where in_progress=true and  user_id=? and provider=?",[$messages[0]->user_id, $provider->name]);
+            $core->receive($providers[$userOfProvider->provider],$conversation ,$messages);
+            MessagePool::whereIn('id',$ids)->delete();
         }
         return $msg->get('channel')->basic_ack($msg->get('delivery_tag'));
     }

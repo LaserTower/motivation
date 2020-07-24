@@ -11,7 +11,7 @@ class DeployTimers extends CorePart
 {
     function execute($provider, $messages, ?Conversation $conversation)
     {
-        (new Vadim())->deployTimers($conversation->part_external_data['scheduler_id']);
+        (new Vadim())->deployTimers($conversation->parent_schedule_id);
         return null;
     }
 }

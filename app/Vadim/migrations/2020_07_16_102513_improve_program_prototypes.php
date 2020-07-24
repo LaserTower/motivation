@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlarmClockPrototypes extends Migration
+class ImproveProgramPrototypes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AlarmClockPrototypes extends Migration
      */
     public function up()
     {
-        Schema::create('alarm_clock_prototypes', function (Blueprint $table) {
+        Schema::create('improve_program_prototypes', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('settings_bot_id');
             $table->string('name', 100);
@@ -29,6 +29,6 @@ class AlarmClockPrototypes extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('alarm_clock_prototypes');
+        Schema::dropIfExists('improve_program_prototypes');
     }
 }

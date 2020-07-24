@@ -19,7 +19,7 @@ class ClockPool extends Migration
             $table->integer('alarm_clock_schedule_id');
             $table->integer('timer_part_id');
             $table->integer('users_of_providers_id');
-            $table->integer('player_id');
+            $table->integer('player_id')->nullable();
             $table->boolean('in_progress')->default(false);
         });
     }

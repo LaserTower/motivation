@@ -2,11 +2,11 @@
 
 namespace App\VKProvider\Commands;
 
-
 use App\Denis\Core;
-use App\VKProvider\VkProvider;
+use App\VKProvider\CallbackApiMyHandler;
 use Illuminate\Console\Command;
-
+use VK\CallbackApi\LongPoll\VKCallbackApiLongPollExecutor;
+use VK\Client\VKApiClient;
 
 class VKWaitForUserMessage extends Command
 {
@@ -32,11 +32,24 @@ class VKWaitForUserMessage extends Command
 
     public function handle()
     {
-        $core = new Core();
-        $provider = new VkProvider();
-        $generator = $provider->handle();
-        foreach ($generator as $newEntity) {
-            $core->saveMessage('vk',$newEntity);
+        $access_token = '3cfcd3da2e24844ec19519fa9ffda0f1151f184b981c5a208ea5fa7cc4ec50cb67233d7a542bc2058b168';
+        $group_id = 167564984;
+        $vk = new VKApiClient();
+        $vk->groups()->setLongPollSettings($access_token, [
+            'group_id'      => $group_id,
+            'enabled' => 1,
+            'message_new' => 1,
+            'message_typing_state' => 1,
+            'message_allow' => 0,
+            'message_reply' => 0,
+            'api_version'=>'5.101'
+        ]);
+        $timestamp = 12;
+        $wait = 25;
+        
+        $executor = new VKCallbackApiLongPollExecutor($vk, $access_token, $group_id, new CallbackApiMyHandler(new Core()), $wait);
+        while (true){
+            $executor->listen();
         }
     }
 }

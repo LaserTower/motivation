@@ -3,7 +3,7 @@
 namespace App\Vadim\Commands;
 
 
-use App\Vadim\Models\AlarmClockPrototype;
+use App\Vadim\Models\ImproveProgramPrototype;
 
 use App\Vadim\Parts\TimerRelativeBase;
 use Illuminate\Console\Command;
@@ -38,12 +38,12 @@ class ClockPrototype extends Command
           new TimerRelativeBase(6,'planning_sleep_time','-30 min'),
         ];
         
-        AlarmClockPrototype::create(
+        ImproveProgramPrototype::create(
             [
                 'name' => 'Бессонница',
                 'settings_bot_id' => 3,
                 'payload' => [
-                    'timers' => json_encode($payload)
+                    'timers' => $payload
                 ]
             ]);
     }

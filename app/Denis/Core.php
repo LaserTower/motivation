@@ -5,6 +5,7 @@ namespace App\Denis;
 
 
 use App\Denis\Models\Conversation;
+use App\Denis\Models\MessagePool;
 use App\Denis\Models\Prototype;
 use App\Denis\Parts\CorePart;
 use App\Denis\Parts\EmptyPart;
@@ -12,9 +13,8 @@ use App\Models\UserOfProviders;
 
 class Core
 {
-    public function receive($provider, $message)
+    public function receive($provider,$conversation, $message)
     {
-        $conversation = Conversation::find($message->conversation_id);
         $prototype = Prototype::find($conversation->prototype_id);
 
         $next = $conversation->next_part_id ?? 1;
@@ -32,6 +32,7 @@ class Core
         //как определить конец диалога - next=null и удовлетворённый part
         if (is_null($next) && $part->done) {
             $this->endOfConversation($conversation);
+           // $conversation->delete();
         }
     }
 
@@ -40,11 +41,11 @@ class Core
         if (!is_null($next)) {
             $conversation->next_part_id = $next;
         }
-        $conversation->part_external_data[$part->id] = $part->externalData;
+        $conversation->part_external_data = $part->externalData;
         $conversation->save();
     }
 
-    public function saveMessage($provider_name, CorePart $newEntity)
+    public function providerMessage($provider_name, CorePart $newEntity)
     {
         $userOfProvidersModel = UserOfProviders::firstOrCreate(
             [
@@ -61,6 +62,11 @@ class Core
             $this->attachConversation($userOfProvidersModel, $conversation);
         }
 
+        $this->saveMessage($userOfProvidersModel, $newEntity);
+    }
+
+    protected function saveMessage($userOfProvidersModel, $newEntity)
+    {
         \DB::table('message_pool')->insert([
             'conversation_id' => $userOfProvidersModel->locked_by_conversation_id,
             'message' => serialize($newEntity)
@@ -75,6 +81,10 @@ class Core
             //это самое первое сообщение
             $userOfProvidersModel->locked_by_conversation_id = $conversationModel->id;
             $userOfProvidersModel->save();
+            $newEntity = new EmptyPart();
+            $newEntity->user_id = $userOfProvidersModel->provider_user_id;
+            $newEntity->provider = $userOfProvidersModel->provider;
+            $this->saveMessage($userOfProvidersModel, $newEntity);
             return true;
         } else {
             return false;
@@ -85,7 +95,7 @@ class Core
 
         //если не вышел таймаут прошлого бота тоже подожди
     }
-    
+
     protected function endOfConversation($conversation)
     {
         UserOfProviders::where('locked_by_conversation_id', $conversation->id)->update([

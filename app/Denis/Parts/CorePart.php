@@ -21,8 +21,10 @@ abstract class CorePart
     const BINDINGS = [
         'call-manager' => CallAManager::class,
         'condition' => Condition::class,
-        'pick-data' => PickData::class,
-        'user-choice' => UserChoice::class,
+        'pick-data-program' => PickDataForProgram::class,
+        'pick-data-once' => PickDataOnce::class,
+        'user-choice-once' => UserChoiceOnce::class,
+        'user-choice-program' => UserChoiceForProgram::class,
         'message-text' => Message::class,
         'denis-auth' => Auth::class,
     ];
