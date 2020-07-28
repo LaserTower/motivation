@@ -37,7 +37,8 @@ class UserChoiceOnce extends CorePart
 
     public function askQuestion($provider, $messages, $conversation)
     {
-        $this->user_id = $conversation->user_id;
+        $this->user_id = $conversation->userId();
+        $this->done = false;
         $provider->transmit($this);
         return null;
     }
@@ -45,6 +46,7 @@ class UserChoiceOnce extends CorePart
     public function checkAnswer($provider, $messages, $conversation)
     {
         if ($messages[0] instanceof EmptyPart) {
+            $this->done = false;
             return null;
         }
 

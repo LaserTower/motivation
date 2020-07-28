@@ -8,7 +8,6 @@ use App\Denis\Parts\CorePart;
 use App\VKProvider\Parts\Message;
 use App\VKProvider\Parts\UserChoice;
 use App\VKProvider\Parts\PickData;
-use VK\Client\VKApiClient;
 
 class VkProvider
 {

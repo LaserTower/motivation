@@ -34,6 +34,7 @@ class PickDataOnce extends CorePart
 
     public function askQuestion($provider, $messages, $conversation)
     {
+        $this->done = false;
         $this->user_id = $conversation->userId();
         $provider->transmit($this);
         return null;
@@ -48,9 +49,10 @@ class PickDataOnce extends CorePart
             }
         }
         if (count($mess) < 1) {
+            $this->done = false;
             return null;
         }
-        $conversation->savePartVariable($conversation, $this->variable, implode(' ', $mess));
+        $this->savePartVariable($conversation, $this->variable, implode(' ', $mess));
         return $this->next;
     }
 

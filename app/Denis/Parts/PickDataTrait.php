@@ -15,6 +15,4 @@ trait PickDataTrait
             return $this->checkAnswer($provider, $messages, $conversation);
         }
     }
-    
-    
 }

@@ -2,6 +2,7 @@
 
 namespace App\Denis\Commands;
 
+use App\MQ\ReconnectRabbitMq;
 use Illuminate\Console\Command;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -24,7 +25,7 @@ class RoundRobin extends Command
     
     public function handle()
     {
-        $connection = new AMQPStreamConnection('bot_rabbitmq', 5672, 'guest', 'guest');
+        $connection = new ReconnectRabbitMq('bot_rabbitmq', 5672, 'guest', 'guest');
         $channel = $connection->channel();
 
         $channel->queue_declare('chat_exec', false, true, false, false);

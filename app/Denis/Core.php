@@ -10,10 +10,11 @@ use App\Denis\Models\Prototype;
 use App\Denis\Parts\CorePart;
 use App\Denis\Parts\EmptyPart;
 use App\Models\UserOfProviders;
+use Carbon\Carbon;
 
 class Core
 {
-    public function receive($provider,$conversation, $message)
+    public function receive($provider, $conversation, $message)
     {
         $prototype = Prototype::find($conversation->prototype_id);
 
@@ -31,8 +32,8 @@ class Core
         } while (!is_null($next));
         //как определить конец диалога - next=null и удовлетворённый part
         if (is_null($next) && $part->done) {
-            $this->endOfConversation($conversation);
-           // $conversation->delete();
+            $this->endOfConversation($provider, $conversation);
+            $conversation->delete();
         }
     }
 
@@ -75,31 +76,43 @@ class Core
 
     public function attachConversation($userOfProvidersModel, $conversationModel)
     {
-        if (is_null($userOfProvidersModel->locked_by_conversation_id)) {
-            $conversationModel->save();
-            $conversationModel->refresh();
-            //это самое первое сообщение
-            $userOfProvidersModel->locked_by_conversation_id = $conversationModel->id;
-            $userOfProvidersModel->save();
-            $newEntity = new EmptyPart();
-            $newEntity->user_id = $userOfProvidersModel->provider_user_id;
-            $newEntity->provider = $userOfProvidersModel->provider;
-            $this->saveMessage($userOfProvidersModel, $newEntity);
-            return true;
-        } else {
+        if ($this->conversationIsLock($userOfProvidersModel, $conversationModel)) {
             return false;
         }
-
-
-        //если в очереди есть сообщения для того бота что уже выполняется то придётся подождать
-
-        //если не вышел таймаут прошлого бота тоже подожди
+        
+        $conversationModel->save();
+        $conversationModel->refresh();
+        //это самое первое сообщение
+        $userOfProvidersModel->locked_by_conversation_id = $conversationModel->id;
+        $userOfProvidersModel->save();
+        $newEntity = new EmptyPart();
+        $newEntity->user_id = $userOfProvidersModel->provider_user_id;
+        $newEntity->provider = $userOfProvidersModel->provider;
+        $this->saveMessage($userOfProvidersModel, $newEntity);
+        return true;
     }
 
-    protected function endOfConversation($conversation)
+    protected function conversationIsLock($userOfProvidersModel, $conversationModel)
+    {
+        if (is_null($userOfProvidersModel->locked_by_conversation_id)) {
+            return false;
+        }
+        //если в очереди есть сообщения для того бота что уже выполняется то придётся подождать
+        if(MessagePool::where('conversation_id',$conversationModel->id)->count()>0){
+            return true;
+        }
+        
+        //если не вышел таймаут прошлого бота подожди
+        if($conversationModel->updated_at>Carbon::now()->subMinutes(10) ){
+            return true;    
+        }
+        return false;
+    }
+
+    protected function endOfConversation($provider, $conversation)
     {
         UserOfProviders::where('locked_by_conversation_id', $conversation->id)->update([
-            'locked_by_conversation_id' => null
+            'locked_by_conversation_id' => config('denis.default_prototype_id.' . $provider->name)
         ]);
     }
 }

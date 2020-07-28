@@ -69,23 +69,19 @@ class Vadim
         $schedulerModel = AlarmClockSchedule::find($clockTimer->alarm_clock_schedule_id);
 
         if ($schedulerModel->clock_external_data['mode'] == 'setup') {
-            if($this->setupTimerConversation($schedulerModel)){
+            if ($this->setupTimerConversation($schedulerModel)) {
                 $temp = $schedulerModel->clock_external_data;
                 $temp['mode'] = 'run';
-                $schedulerModel->clock_external_data=$temp;
+                $schedulerModel->clock_external_data = $temp;
                 $schedulerModel->save();
-                //$clockTimer->delete();
+                $clockTimer->delete();
             }
         }
-
         
-        $clockPrototype=ImproveProgramPrototype::find($schedulerModel->alarm_clock_prototype_id);
-
-        $prototype_id=$clockPrototype->payload['timers'][$clockTimer->timer_part_id]['bot_id'];
-        //как получить номер бота для создания 'prototype_id'
-      
-        
-        if($schedulerModel->clock_external_data['mode'] == 'run'){
+        if ($schedulerModel->clock_external_data['mode'] == 'run') {
+            $clockPrototype = ImproveProgramPrototype::find($schedulerModel->alarm_clock_prototype_id);
+            //как получить номер бота для создания 'prototype_id'
+            $prototype_id = $clockPrototype->payload['timers'][$clockTimer->timer_part_id]['bot_id'];
             $userOfProvidersModel = UserOfProviders::find($schedulerModel->users_of_providers_id);
             $conversationModel = Conversation::create([
                 'user_of_provider_id' => $schedulerModel->users_of_providers_id,
@@ -94,12 +90,13 @@ class Vadim
             ]);
             return (new Core())->attachConversation($userOfProvidersModel, $conversationModel);
         }
+        return false;
     }
 
     public function setupTimerConversation($schedulerModel)
     {
         $clockPrototypeModel = ImproveProgramPrototype::find($schedulerModel->alarm_clock_prototype_id);
-        
+
         $conversationModel = Conversation::create([
             'user_of_provider_id' => $schedulerModel->users_of_providers_id,
             'prototype_id' => $clockPrototypeModel->settings_bot_id,

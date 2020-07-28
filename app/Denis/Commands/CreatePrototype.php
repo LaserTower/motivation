@@ -12,6 +12,7 @@ use App\Denis\Parts\EmptyPart;
 use App\Denis\Parts\Message;
 use App\Denis\Parts\PickDataOnce;
 use App\Denis\Parts\UserChoiceOnce;
+use App\VKProvider\Parts\UserChoice;
 use Illuminate\Console\Command;
 
 
@@ -106,13 +107,24 @@ class CreatePrototype extends Command
             new Message(5,null,'возьмите лист бумаги и выпишите все незавершённые дела, после чего отложите лист. Сделаете их завтра')
         ];*/
 
-        $payload = [
+/*        $payload = [
             new Message(1,null,'ложитесь спать. Если не получится уснуть, не включайте свет, а расслабьтесь с закрытыми глазами и представьте как засыпаете. Если не получится, сконцентрируйтесь на левой пятке')
+        ];*/
+
+        $payload = [
+            new Message(1,2,'Привет'),
+            new PickDataOnce(2, 3, 'player_name', 'ты кто'),
+            new UserChoiceOnce(3, null, 'help', 'Чем могу помочь?', [
+                1 => 'Бессонница',
+                2 => 'Похудение',
+                3 => 'Запой',
+            ]),
+            
         ];
 
         PrototypeModel::create(
             [
-                'name' => 'За пол часа',
+                'name' => 'тест1',
                 'published' => true,
                 'payload' => [
                     'parts' => (new Constructor($payload))->makePrototype()

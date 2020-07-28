@@ -34,8 +34,7 @@ class StartUpConversation extends Command
     {
         $conversationPrototypeId = $this->argument('conversationPrototypeId');
         $uopId = $this->argument('users_of_providers_id');
-        $userOfProvidersModel = UserOfProviders::find($uopId)->first();
-
+        $userOfProvidersModel = UserOfProviders::find($uopId);
         $userOfProvidersModel->locked_by_conversation_id = null;
         $conversation = Conversation::make(
             [

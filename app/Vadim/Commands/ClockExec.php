@@ -4,6 +4,7 @@ namespace App\Vadim\Commands;
 
 use App\Core;
 use App\Denis\Parts\Typing;
+use App\MQ\ReconnectRabbitMq;
 use App\Vadim\Models\AlarmClockPool;
 use App\Vadim\Models\AlarmClockSchedule;
 use App\Vadim\Vadim;
@@ -35,7 +36,7 @@ class ClockExec extends Command
     
     public function handle()
     {
-        $connection = new AMQPStreamConnection('bot_rabbitmq', 5672, 'guest', 'guest');
+        $connection = new ReconnectRabbitMq('bot_rabbitmq', 5672, 'guest', 'guest');
         $channel = $connection->channel();
         $channel->queue_declare('clock_exec', false, false, false, false);
         echo " [*] Waiting for messages. To exit press CTRL+C\n";
