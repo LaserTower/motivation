@@ -55,6 +55,7 @@ class Vadim
         DB::transaction(function () use ($scheduler, $timers, $prototype) {
             foreach ($timers as $timer) {
                 AlarmClockPool::create([
+                    'users_of_providers_id' => $scheduler->users_of_providers_id,
                     'clock_at' => $timer->getTimer($scheduler),
                     'alarm_clock_schedule_id' => $scheduler->id,
                     'timer_part_id' => $timer->id,
@@ -67,50 +68,55 @@ class Vadim
     {
         $clockTimer = AlarmClockPool::find($alarm_clock_pool_id);
         $schedulerModel = AlarmClockSchedule::find($clockTimer->alarm_clock_schedule_id);
+        $clockPrototype = ImproveProgramPrototype::find($schedulerModel->alarm_clock_prototype_id);
+        $userOfProvidersModel = UserOfProviders::find($schedulerModel->users_of_providers_id);
 
-        if ($schedulerModel->clock_external_data['mode'] == 'setup') {
-            if ($this->setupTimerConversation($schedulerModel)) {
-                $temp = $schedulerModel->clock_external_data;
-                $temp['mode'] = 'run';
-                $schedulerModel->clock_external_data = $temp;
-                $schedulerModel->save();
-                $clockTimer->delete();
-            }
-        }
-        
+        $attached = false;
         if ($schedulerModel->clock_external_data['mode'] == 'run') {
-            $clockPrototype = ImproveProgramPrototype::find($schedulerModel->alarm_clock_prototype_id);
-            //как получить номер бота для создания 'prototype_id'
+            //при наступлении события начинать диалог
+
             $prototype_id = $clockPrototype->payload['timers'][$clockTimer->timer_part_id]['bot_id'];
-            $userOfProvidersModel = UserOfProviders::find($schedulerModel->users_of_providers_id);
+
             $conversationModel = Conversation::create([
                 'user_of_provider_id' => $schedulerModel->users_of_providers_id,
                 'prototype_id' => $prototype_id,
                 'next_part_id' => 1,
             ]);
-            return (new Core())->attachConversation($userOfProvidersModel, $conversationModel);
+            $conversationModel->refresh();
+            $attached = (new Core())->attachConversation($userOfProvidersModel, $conversationModel);
         }
-        return false;
-    }
 
-    public function setupTimerConversation($schedulerModel)
-    {
-        $clockPrototypeModel = ImproveProgramPrototype::find($schedulerModel->alarm_clock_prototype_id);
+        if ($schedulerModel->clock_external_data['mode'] == 'setup') {
+            //при прикреплении программы начать настроечный диалог
+            $conversationModel = Conversation::create([
+                'user_of_provider_id' => $schedulerModel->users_of_providers_id,
+                'prototype_id' => $clockPrototype->settings_bot_id,
+                'next_part_id' => 1,
+                'parent_schedule_id' => $schedulerModel->id
+            ]);
+            $conversationModel->refresh();
 
-        $conversationModel = Conversation::create([
-            'user_of_provider_id' => $schedulerModel->users_of_providers_id,
-            'prototype_id' => $clockPrototypeModel->settings_bot_id,
-            'next_part_id' => 1,
-            'parent_schedule_id' => $schedulerModel->id
-        ]);
-        $conversationModel->refresh();
-        $userOfProvidersModel = UserOfProviders::find($schedulerModel->users_of_providers_id);
-        return (new Core())->attachConversation($userOfProvidersModel, $conversationModel);
+            $attached = (new Core())->attachConversation($userOfProvidersModel, $conversationModel);
+
+            if ($attached) {
+                $temp = $schedulerModel->clock_external_data;
+                $temp['mode'] = 'run';
+                $schedulerModel->clock_external_data = $temp;
+                $schedulerModel->save();
+                $clockTimer->delete();
+                $attached = true;
+            }
+        }
+
+        if (!$attached) {
+            $clockTimer->in_progress = false;
+            $clockTimer->save();
+        }
     }
 
     protected function gyrate($el)
     {
-        $obj = new $this->bindings[$el->type]();
+        $obj = new $this->bindings[$el['type']]();
 
         foreach ($el as $field => $value) {
             $obj->$field = $value;

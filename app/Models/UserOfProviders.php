@@ -36,10 +36,19 @@ class UserOfProviders extends Model
         }
     }
 
-    public function saveVariable($key, $value)
+    public function saveVariable($key, $value, $many)
     {
         $var = $this->getAttribute('variables');
-        $var[$key] = $value;
+        if ($many) {
+            $var[$key][] = [
+                't' => time(),
+                'v' => $value
+            ];
+        } else {
+            $var[$key] = $value;
+        }
+
         $this->setAttribute('variables', $var);
+        $this->save();
     }
 }

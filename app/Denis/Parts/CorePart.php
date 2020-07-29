@@ -19,14 +19,15 @@ abstract class CorePart
     public $externalData = [];
 
     const BINDINGS = [
+        'message-text' => Message::class,
         'call-manager' => CallAManager::class,
         'condition' => Condition::class,
         'pick-data-program' => PickDataForProgram::class,
         'pick-data-once' => PickDataOnce::class,
         'user-choice-once' => UserChoiceOnce::class,
         'user-choice-program' => UserChoiceForProgram::class,
-        'message-text' => Message::class,
         'denis-auth' => Auth::class,
+        'deploy-timers'=> DeployTimers::class,
     ];
 
     abstract function execute($provider, $messages,?Conversation $conversation);

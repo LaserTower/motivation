@@ -33,7 +33,6 @@ class Core
         //как определить конец диалога - next=null и удовлетворённый part
         if (is_null($next) && $part->done) {
             $this->endOfConversation($provider, $conversation);
-            $conversation->delete();
         }
     }
 
@@ -79,7 +78,7 @@ class Core
         if ($this->conversationIsLock($userOfProvidersModel, $conversationModel)) {
             return false;
         }
-        
+
         $conversationModel->save();
         $conversationModel->refresh();
         //это самое первое сообщение
@@ -97,22 +96,34 @@ class Core
         if (is_null($userOfProvidersModel->locked_by_conversation_id)) {
             return false;
         }
+        //если не вышел таймаут прошлого бота подожди
+        if ($conversationModel->updated_at > Carbon::now()->subMinutes(10)) {
+            return false;
+        }
+        
         //если в очереди есть сообщения для того бота что уже выполняется то придётся подождать
-        if(MessagePool::where('conversation_id',$conversationModel->id)->count()>0){
+        if (MessagePool::where('conversation_id', $userOfProvidersModel->locked_by_conversation_id)->where('in_progress', false)->count() > 0) {
             return true;
         }
         
-        //если не вышел таймаут прошлого бота подожди
-        if($conversationModel->updated_at>Carbon::now()->subMinutes(10) ){
-            return true;    
-        }
         return false;
     }
 
     protected function endOfConversation($provider, $conversation)
     {
-        UserOfProviders::where('locked_by_conversation_id', $conversation->id)->update([
-            'locked_by_conversation_id' => config('denis.default_prototype_id.' . $provider->name)
-        ]);
+        //не удалять дефолтный диалог
+        if ($conversation->prototype_id == config('denis.default_prototype_id.' . $provider->name)) {
+            return;
+        }
+        $conversation->delete();
+
+        //по окончании мини бота должен переходить на Швейцара
+
+        $portier = Conversation::where([
+            ['prototype_id', config('denis.default_prototype_id.' . $provider->name)],
+            ['user_of_provider_id', $conversation->user_of_provider_id]
+        ])->first();
+        $userOfProvidersModel = UserOfProviders::find($conversation->user_of_provider_id);
+        $this->attachConversation($userOfProvidersModel, $portier);
     }
 }

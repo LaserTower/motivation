@@ -9,6 +9,7 @@ use App\Vadim\Vadim;
 
 class DeployTimers extends CorePart
 {
+    public $type = 'deploy-timers';
     function execute($provider, $messages, ?Conversation $conversation)
     {
         (new Vadim())->deployTimers($conversation->parent_schedule_id);

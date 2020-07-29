@@ -38,7 +38,7 @@ class ClockExec extends Command
     {
         $connection = new ReconnectRabbitMq('bot_rabbitmq', 5672, 'guest', 'guest');
         $channel = $connection->channel();
-        $channel->queue_declare('clock_exec', false, false, false, false);
+        $channel->queue_declare('clock_exec', false, true, false, false);
         echo " [*] Waiting for messages. To exit press CTRL+C\n";
         
         $channel->basic_consume('clock_exec', 'clock_exec', false, false, false, false, [$this,'consume']);
@@ -55,7 +55,7 @@ class ClockExec extends Command
     public function consume($msg)
     {
         $data = json_decode($msg->body,1);
-        (new Vadim())->clockExec($data['alarm_clock_pool_id']);
+         (new Vadim())->clockExec($data['alarm_clock_pool_id']);
         $msg->get('channel')->basic_ack($msg->get('delivery_tag'));
     }
 }

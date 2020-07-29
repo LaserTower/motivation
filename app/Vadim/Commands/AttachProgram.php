@@ -33,8 +33,8 @@ class AttachProgram extends Command
 
     public function handle()
     {
-        $users_of_providers_id=1;
-        $alarm_clock_prototype_id=1;
+        $users_of_providers_id = 1;
+        $alarm_clock_prototype_id = 1;
         (new Vadim())->attachAlarmsToUserProvider($users_of_providers_id, $alarm_clock_prototype_id);
     }
 }

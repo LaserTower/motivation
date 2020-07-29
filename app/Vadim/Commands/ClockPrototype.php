@@ -33,9 +33,9 @@ class ClockPrototype extends Command
     public function handle()
     {
         $payload = [
-          new TimerRelativeBase(4,'planning_sleep_time','-2 hour'),
-          new TimerRelativeBase(5,'planning_sleep_time','-1 hour'),
-          new TimerRelativeBase(6,'planning_sleep_time','-30 min'),
+          new TimerRelativeBase(1,4,'planning_sleep_time','-2 hour'),
+          new TimerRelativeBase(2,5,'planning_sleep_time','-1 hour'),
+          new TimerRelativeBase(3,6,'planning_sleep_time','-30 min'),
         ];
         
         ImproveProgramPrototype::create(

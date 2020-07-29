@@ -40,7 +40,7 @@ class ClockTimer extends Command
         while (true) {
             //следующий межминутный интервал
             
-            $pool = AlarmClockPool::where('in_progress', false)->whereRaw('extract(\'epoch\' from (transaction_timestamp() -  "clock_at"))::integer % 86400 < 600')->get();
+            $pool = AlarmClockPool::where('in_progress', false)->whereRaw('extract(\'epoch\' from (transaction_timestamp() -  "clock_at"))::integer % 86400 BETWEEN 0 and 60')->get();
             if ($pool->count() == 0) {
                 continue;
             }

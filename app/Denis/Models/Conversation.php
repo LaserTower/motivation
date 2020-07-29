@@ -27,6 +27,7 @@ class Conversation extends Model
         'prototype_id',
         'next_part_id',
         'part_external_data',
+        'parent_schedule_id',
     ];
 
     protected $attributes = [
@@ -40,7 +41,7 @@ class Conversation extends Model
     public function saveVariable($key, $value, $many = false)
     {
         $uop = UserOfProviders::find($this->user_of_provider_id);
-        $uop->saveVariable($key, $value);
+        $uop->saveVariable($key, $value,$many);
     }
 
     public function getVariables()
