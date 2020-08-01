@@ -18,6 +18,7 @@ class VkProvider
         'pick-data-program' => PickData::class,
         'message-text' => Message::class,
         'call-manager' => CallAManager::class,
+        'timezone' => PickData::class,
     ];
     
     public $name = 'vk';

@@ -10,7 +10,6 @@ class AlarmClockSchedule extends Model
     
     protected $fillable = [
         'users_of_providers_id',
-        'timezone',
         'alarm_clock_prototype_id',
         'clock_external_data'
     ];

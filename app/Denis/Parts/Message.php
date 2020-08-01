@@ -5,6 +5,7 @@ namespace App\Denis\Parts;
 class Message extends CorePart
 {
     use ApplyVariables;
+
     public $type = 'message-text';
     public $next;
     public $body;
@@ -28,9 +29,15 @@ class Message extends CorePart
 
     public function execute($provider, $message, $conversation)
     {
+        if (isset($conversation->part_external_data['is_send'])) {
+            return $this->next;
+        }
+
+        $this->externalData['is_send'] = true;
         $this->user_id = $conversation->userId();
         $this->body = $this->formatVariables($this->body, $conversation->getVariables());
         $provider->transmit($this);
+
         return $this->next;
     }
 }

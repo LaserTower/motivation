@@ -28,6 +28,7 @@ abstract class CorePart
         'user-choice-program' => UserChoiceForProgram::class,
         'denis-auth' => Auth::class,
         'deploy-timers'=> DeployTimers::class,
+        'timezone' => TimeZone::class,
     ];
 
     abstract function execute($provider, $messages,?Conversation $conversation);

@@ -40,12 +40,12 @@ class UserOfProviders extends Model
     {
         $var = $this->getAttribute('variables');
         if ($many) {
-            $var[$key][] = [
+            $var['many'][$key][] = [
                 't' => time(),
                 'v' => $value
             ];
         } else {
-            $var[$key] = $value;
+            $var['once'][$key] = $value;
         }
 
         $this->setAttribute('variables', $var);

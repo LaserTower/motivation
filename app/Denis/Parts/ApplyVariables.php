@@ -8,8 +8,10 @@ trait ApplyVariables
 {
     public function formatVariables($string, $variables)
     {
+        $data = $variables['once'] ?? [];
+         
         $out = [];
-        foreach ($variables as $key=>$val){
+        foreach ($data as $key=>$val){
             $out["{{$key}}"]=$val;
         }
         return str_replace(array_keys($out), array_values($out), $string);

@@ -5,7 +5,6 @@ namespace App\Vadim\Parts;
 
 
 use App\Models\UserOfProviders;
-use DateTime;
 use DateTimeZone;
 
 
@@ -42,11 +41,13 @@ class TimerRelativeBase implements \JsonSerializable
         $variables = $userOfProvider->getVariables();
 
         //$base='23:18';
-        $base = $variables[$this->base];
+        $base = $variables['once'][$this->base];
 
-        $date = \DateTime::createFromFormat('G:i', $base, new DateTimeZone($scheduler->timezone));
+        $tz = $variables['once']['timezone'];
+
+        $date = \DateTime::createFromFormat('G:i', $base);
         $date->modify($this->interval);
-        $date->setTimezone(new DateTimeZone('UTC'));
+        $date->modify('-'.$tz.' hour');
         return $date->format('Y-m-d H:i:s');
     }
 }

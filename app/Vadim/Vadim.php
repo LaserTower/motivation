@@ -25,7 +25,6 @@ class Vadim
             //привязываем прототип программы мотивации к игроку 
             $scheduler = AlarmClockSchedule::create([
                 'users_of_providers_id' => $users_of_providers_id,
-                'timezone' => "Asia/Yekaterinburg",
                 'alarm_clock_prototype_id' => $alarm_clock_prototype_id,
                 'clock_external_data' => ['mode' => 'setup']
             ]);
@@ -75,8 +74,14 @@ class Vadim
         if ($schedulerModel->clock_external_data['mode'] == 'run') {
             //при наступлении события начинать диалог
 
-            $prototype_id = $clockPrototype->payload['timers'][$clockTimer->timer_part_id]['bot_id'];
-
+            $prototype_id = null;
+            foreach ($clockPrototype->payload['timers'] as $timer){
+                if($timer['id'] == $clockTimer->timer_part_id){
+                    $prototype_id = $timer['bot_id'];
+                    break;
+                }
+            }
+            
             $conversationModel = Conversation::create([
                 'user_of_provider_id' => $schedulerModel->users_of_providers_id,
                 'prototype_id' => $prototype_id,

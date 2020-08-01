@@ -41,7 +41,7 @@ class Conversation extends Model
     public function saveVariable($key, $value, $many = false)
     {
         $uop = UserOfProviders::find($this->user_of_provider_id);
-        $uop->saveVariable($key, $value,$many);
+        $uop->saveVariable($key, $value, $many);
     }
 
     public function getVariables()
