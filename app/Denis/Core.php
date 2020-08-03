@@ -27,7 +27,7 @@ class Core
             }
             $next = $part->execute($provider, $message, $conversation);
             $this->saveEntity($conversation, $part, $next);
-            $message = [new EmptyPart()];
+            $message = $this->createEmptyPart($conversation);
 
         } while (!is_null($next));
         //как определить конец диалога - next=null и удовлетворённый part
@@ -43,6 +43,15 @@ class Core
         }
         $conversation->part_external_data = $part->externalData;
         $conversation->save();
+    }
+
+    public function createEmptyPart($conversation)
+    {
+        $userOfProvider = UserOfProviders::find($conversation->user_of_provider_id);
+        $ep = new EmptyPart();
+        $ep->user_id = $userOfProvider->provider_user_id;
+        $ep->user_of_provider_id = $userOfProvider->id;
+        return [$ep];
     }
 
     public function providerMessage($provider_name, CorePart $newEntity)
@@ -100,12 +109,11 @@ class Core
         if ($conversationModel->updated_at > Carbon::now()->subMinutes(10)) {
             return false;
         }
-        
+
         //если в очереди есть сообщения для того бота что уже выполняется то придётся подождать
         if (MessagePool::where('conversation_id', $userOfProvidersModel->locked_by_conversation_id)->where('in_progress', false)->count() > 0) {
             return true;
         }
-        
         return false;
     }
 

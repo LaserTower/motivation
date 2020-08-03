@@ -7,6 +7,7 @@ use App\Vadim\Commands\ClockPrototype;
 use App\Vadim\Commands\ClockTimer;
 use App\Vadim\Commands\ClockExec;
 
+use App\Vadim\Commands\ForceClock;
 use Illuminate\Support\ServiceProvider;
 
 class VadimServiceProvider extends ServiceProvider
@@ -38,6 +39,7 @@ class VadimServiceProvider extends ServiceProvider
                 ClockTimer::class,
                 ClockExec::class,
                 AttachProgram::class,
+                ForceClock::class,
             ]);
         }
     }

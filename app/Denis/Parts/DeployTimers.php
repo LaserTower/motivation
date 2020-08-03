@@ -5,6 +5,7 @@ namespace App\Denis\Parts;
 
 
 use App\Denis\Models\Conversation;
+use App\Models\UserOfProviders;
 use App\Vadim\Vadim;
 
 class DeployTimers extends CorePart
@@ -15,6 +16,7 @@ class DeployTimers extends CorePart
     {
         (new Vadim())->deployTimers($conversation->parent_schedule_id);
         $message = new Message(null, null, 'Вам подключена программа');
+        
         $message->user_id = $messages[0]->user_id;
         $provider->transmit($message);
         return null;

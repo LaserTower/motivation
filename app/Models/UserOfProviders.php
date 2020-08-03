@@ -40,10 +40,19 @@ class UserOfProviders extends Model
     {
         $var = $this->getAttribute('variables');
         if ($many) {
-            $var['many'][$key][] = [
+
+            $temp = [
                 't' => time(),
-                'v' => $value
             ];
+
+            if (is_array($value)) {
+                $temp['vid'] = $value[0];
+                $temp['v'] = $value[1];
+            } else {
+                $temp['v'] = $value;
+            }
+
+            $var['many'][$key][] = $temp;
         } else {
             $var['once'][$key] = $value;
         }

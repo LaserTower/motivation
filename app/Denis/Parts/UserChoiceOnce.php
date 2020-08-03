@@ -51,10 +51,11 @@ class UserChoiceOnce extends CorePart
         }
 
         if (!empty($messages[0]->externalData)) {
-            $this->savePartVariable($conversation, $this->variable, $this->variants[$messages[0]->externalData[$this->variable]]);
+            $this->savePartVariable($conversation, $this->variable, [$messages[0]->externalData[$this->variable],$this->variants[$messages[0]->externalData[$this->variable]]]);
         } else {
             $this->savePartVariable($conversation, $this->variable, $messages[0]->body);
         }
+        return $this->next;
     }
 
     function execute($provider, $messages, $conversation)
