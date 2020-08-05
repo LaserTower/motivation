@@ -31,7 +31,7 @@ class Core
 
         } while (!is_null($next));
         //как определить конец диалога - next=null и удовлетворённый part
-        if (is_null($next) && $part->done) {
+        if ($part->done) {
             $this->endOfConversation($provider, $conversation);
         }
     }
@@ -109,7 +109,7 @@ class Core
         if ($conversationModel->updated_at > Carbon::now()->subMinutes(10)) {
             return false;
         }
-
+     
         //если в очереди есть сообщения для того бота что уже выполняется то придётся подождать
         if (MessagePool::where('conversation_id', $userOfProvidersModel->locked_by_conversation_id)->where('in_progress', false)->count() > 0) {
             return true;
@@ -131,7 +131,7 @@ class Core
             ['prototype_id', config('denis.default_prototype_id.' . $provider->name)],
             ['user_of_provider_id', $conversation->user_of_provider_id]
         ])->first();
-        $userOfProvidersModel = UserOfProviders::find($conversation->user_of_provider_id);
+        $userOfProvidersModel = UserOfProviders::find($portier->user_of_provider_id);
         $this->attachConversation($userOfProvidersModel, $portier);
     }
 }

@@ -32,7 +32,17 @@ class UserOfProviders extends Model
     public function getVariables(): array
     {
         if (is_null($this->player_id)) {
-            return $this->getAttribute('variables');
+            $v=$this->getAttribute('variables');
+            
+            if(!isset($v['once'])){
+                $v['once']=[];
+            }
+
+            if(!isset($v['many'])){
+                $v['many']=[];
+            }
+            
+            return $v;
         }
     }
 
@@ -41,18 +51,9 @@ class UserOfProviders extends Model
         $var = $this->getAttribute('variables');
         if ($many) {
 
-            $temp = [
-                't' => time(),
-            ];
-
-            if (is_array($value)) {
-                $temp['vid'] = $value[0];
-                $temp['v'] = $value[1];
-            } else {
-                $temp['v'] = $value;
-            }
-
-            $var['many'][$key][] = $temp;
+           $value['t']=time();
+            
+            $var['many'][$key][] = $value;
         } else {
             $var['once'][$key] = $value;
         }

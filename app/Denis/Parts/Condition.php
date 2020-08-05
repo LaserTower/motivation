@@ -32,7 +32,7 @@ class Condition extends CorePart
     public function execute($provider, $message, $conversation)
     {
         $variables = $conversation->getVariables();
-
+        
         if (array_key_exists($this->variable, $variables['many'])) {
             $test = end($variables['many'][$this->variable]);
         }
@@ -40,11 +40,11 @@ class Condition extends CorePart
         if (array_key_exists($this->variable, $variables['once'])) {
             $test = $variables['once'][$this->variable];
         }
-        
-        if (isset($test['vid'])) {
+
+        if (is_array($test)) {
             return $this->rules[$test['vid']];
         } else {
-            return $this->rules[$test['v']];
+            return $this->rules[$test];
         }
     }
 }

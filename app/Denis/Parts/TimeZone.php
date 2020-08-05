@@ -30,7 +30,7 @@ class TimeZone extends UserChoiceOnce
         }
 
         if ($matches['user_minute'] == 59 or $currentTime->format('i') == 00) {
-            $message = new Message(null, null, 'Я боюсь ошибиться, пожалуйста ещё раз напишите мне сколько времени');
+            $message = new Message(null, null, 'Я боюсь ошибиться, пожалуйста напишите через минуту ещё раз напишите мне сколько времени');
             $message->user_id = $messages[0]->user_id;
             $this->done = false;
             $provider->transmit($message);
@@ -42,7 +42,7 @@ class TimeZone extends UserChoiceOnce
         
         $message = new Message(null, null, 'определил смещение как +' . $offset);
         $message->user_id = $messages[0]->user_id;
-        $this->done = false;
+        $this->done = true;
         $provider->transmit($message);
         
         $this->savePartVariable($conversation, 'timezone', $offset);

@@ -11,6 +11,7 @@ use App\Denis\Parts\Condition;
 use App\Denis\Parts\EmptyPart;
 use App\Denis\Parts\Message;
 use App\Denis\Parts\PickDataOnce;
+use App\Denis\Parts\TimeZone;
 use App\Denis\Parts\UserChoiceOnce;
 use App\VKProvider\Parts\UserChoice;
 use Illuminate\Console\Command;
@@ -40,11 +41,12 @@ class CreatePrototype extends Command
 
     public function handle()
     {
-        /*        $payload = [
+                $payload = [
                     new Message(1,2,'Здравствуйте! Вы обратились в группу психологической помощи и поддержки.'),
-                    new PickData(2,3,'name','Как к Вам можно обращаться?'),
-                    new Message(3,4, 'Приятно познакомиться , #name#'),
-                    new UserChoice(4,5,'problem','Уточните, какая у Вас проблема :',[
+                    new PickDataOnce(2,3,'name','Как к Вам можно обращаться?'),
+                    new Message(3,9, 'Приятно познакомиться , {name}'),
+                    new TimeZone(9,4,'','Напишите сколько у вас времени в формате ЧЧ:ММ'),
+                    new UserChoiceOnce(4,5,'problem','Уточните, какая у Вас проблема :',[
                         1=>'Отсутствие мотивации',
                         2=>'Депрессия',
                         3=>'Тревожность',
@@ -67,10 +69,10 @@ class CreatePrototype extends Command
                        8=>6,
                        9=>6 
                     ]) ,
-                    new PickData(6,8,'problem_advance','Расскажите подробнее о своей проблеме.'),
-                    new PickData(7,8,'problem_advance','Что Вас беспокоит? Расскажите подробнее об этом.'),
+                    new PickDataOnce(6,8,'problem_advance','Расскажите подробнее о своей проблеме.'),
+                    new PickDataOnce(7,8,'problem_advance','Что Вас беспокоит? Расскажите подробнее об этом.'),
                     new CallAManager(8,'пора присоединиться к диалогу с пользователем #id#')
-                ];*/
+                ];
 
         /*        $payload = [
                     new Message(1,2,'Здравствуйте! попробуем настроить сон'),
@@ -111,7 +113,7 @@ class CreatePrototype extends Command
             new Message(1,null,'ложитесь спать. Если не получится уснуть, не включайте свет, а расслабьтесь с закрытыми глазами и представьте как засыпаете. Если не получится, сконцентрируйтесь на левой пятке')
         ];*/
 
-        $payload = [
+        /*$payload = [
             new Message(1,2,'Привет'),
             new PickDataOnce(2, 3, 'player_name', 'ты кто'),
             new UserChoiceOnce(3, null, 'help', 'Чем могу помочь?', [
@@ -120,11 +122,11 @@ class CreatePrototype extends Command
                 3 => 'Запой',
             ]),
             
-        ];
+        ];*/
 
         PrototypeModel::create(
             [
-                'name' => 'тест1',
+                'name' => 'Швейцар',
                 'published' => true,
                 'payload' => [
                     'parts' => (new Constructor($payload))->makePrototype()
