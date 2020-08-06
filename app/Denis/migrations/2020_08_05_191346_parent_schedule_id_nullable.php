@@ -13,7 +13,7 @@ class ParentScheduleIdNullable extends Migration
      */
     public function up()
     {
-        \DB::sta('ALTER TABLE bot_conversations ALTER COLUMN parent_schedule_id DROP NOT NULL;');
+        \DB::statement('ALTER TABLE bot_conversations ALTER COLUMN parent_schedule_id DROP NOT NULL;');
     }
 
     /**
