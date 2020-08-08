@@ -19,4 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('improve_program', 'ImproveProgram');
-
+Route::resource('bot_prototype', 'BotPrototype');
