@@ -17,6 +17,4 @@ Route::get('/web', function () {
     return view('welcome');
 });
 
-Route::prefix('web')->group(function () {
-    Route::resource('improve_program', 'ImproveProgram');
-});
+
