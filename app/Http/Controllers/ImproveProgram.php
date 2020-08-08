@@ -4,13 +4,15 @@
 namespace App\Http\Controllers;
 
 
+use App\Vadim\Models\ImproveProgramPrototype;
 use Illuminate\Http\Request;
 
 class ImproveProgram extends Controller
 {
     protected function index(Request $request)
     {
-        return 
-        $columns = $request->input('columns');
+        //$columns = $request->input('columns');
+        $model = new ImproveProgramPrototype();
+        return $model->get();
     }
 }
