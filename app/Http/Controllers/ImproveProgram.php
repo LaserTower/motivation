@@ -10,7 +10,7 @@ class ImproveProgram extends Controller
 {
     protected function index(Request $request)
     {
-        
+        return 
         $columns = $request->input('columns');
     }
 }

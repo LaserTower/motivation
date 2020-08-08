@@ -113,21 +113,18 @@ services:
     links:
       - bot_rabbitmq
     
-
-  #Nginx Service
-#  webserver:
-#    image: nginx:alpine
-#    container_name: webserver
-#    restart: unless-stopped
-#    tty: true
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#    volumes:
-#      - ./:/var/www
-#      - ./nginx/conf.d/:/etc/nginx/conf.d/
-#    networks:
-#      - app-network
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/apps/leash/public
+      - ../../../docker/src/frontend/vhost.conf:/etc/nginx/conf.d/vhost.conf
+    networks:
+      - app-network
 
   bot_db:
     image: postgres:12.2
