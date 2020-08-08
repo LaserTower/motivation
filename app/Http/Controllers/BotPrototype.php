@@ -22,5 +22,4 @@ class BotPrototype extends Controller
         $model = new Prototype();
         $model->create($name);
     }
-    
 }
