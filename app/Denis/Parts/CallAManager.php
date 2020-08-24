@@ -41,7 +41,7 @@ class CallAManager extends CorePart
         $this->message = $this->formatVariables($this->message, $conversation->getVariables());
 
         $userOfProvidersModel = UserOfProviders::find($conversation->user_of_provider_id);
-        $newmessage = new Message(0, 0, $this->message);
+        $newmessage = new Message(0, 0, 'Решить проблему поможет наш специалист');
         $newmessage->user_id = $userOfProvidersModel->provider_user_id;
         $provider->transmit($newmessage);
         
