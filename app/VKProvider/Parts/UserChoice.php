@@ -13,8 +13,8 @@ class UserChoice
 
     public function __construct()
     {
-        $this->access_token = '3cfcd3da2e24844ec19519fa9ffda0f1151f184b981c5a208ea5fa7cc4ec50cb67233d7a542bc2058b168';
-        $this->group_id = 167564984;
+        $this->access_token = env('VK_ACCESS_TOKEN');
+        $this->group_id = env('VK_GROUP_ID');
     }
 
     public function transmit(\App\Denis\Parts\CorePart $message)

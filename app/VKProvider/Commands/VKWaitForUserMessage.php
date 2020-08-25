@@ -32,8 +32,8 @@ class VKWaitForUserMessage extends Command
 
     public function handle()
     {
-        $access_token = '3cfcd3da2e24844ec19519fa9ffda0f1151f184b981c5a208ea5fa7cc4ec50cb67233d7a542bc2058b168';
-        $group_id = 167564984;
+        $access_token = env('VK_ACCESS_TOKEN');
+        $group_id = env('VK_GROUP_ID');
         $vk = new VKApiClient();
         $vk->groups()->setLongPollSettings($access_token, [
             'group_id'      => $group_id,

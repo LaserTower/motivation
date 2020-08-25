@@ -25,7 +25,7 @@ services:
       networks:
         - app-network
 
-  chatbot-vk:
+  consumer-vk:
     build:
       context: ../../
       dockerfile: src/backend/Dockerfile

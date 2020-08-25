@@ -39,13 +39,12 @@ class ClockTimer extends Command
 
         while (true) {
             //следующий межминутный интервал
-            AlarmClockPool::whereRaw('clock_at::time < transaction_timestamp()::time - interval \'20\' minute')
-                ->update('in_progress', false);
+            AlarmClockPool::whereRaw('clock_at::time > transaction_timestamp()::time')->update(['in_progress'=> false]);
             $pool = AlarmClockPool::where('in_progress', false)
                 ->whereRaw('clock_at::time between transaction_timestamp()::time - interval \'20\' minute and transaction_timestamp()::time')
                 ->get();
             if ($pool->count() == 0) { 
-                sleep(1);
+                sleep(2);
                 continue;
             }
             
