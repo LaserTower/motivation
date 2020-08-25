@@ -3,6 +3,7 @@
 namespace App\Denis;
 
 use App\Denis\Commands\CreatePrototype;
+use App\Denis\Commands\DeployTimers;
 use App\Denis\Commands\RoundRobin;
 use App\Denis\Commands\ChatExec;
 
@@ -42,6 +43,7 @@ class DenisServiceProvider extends ServiceProvider
                 RoundRobin::class,
                 ChatExec::class,
                 StartUpConversation::class,
+                DeployTimers::class,
             ]);
         }
     }
