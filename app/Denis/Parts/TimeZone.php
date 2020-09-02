@@ -22,7 +22,7 @@ class TimeZone extends UserChoiceOnce
         $currentTime = new \DateTime();
 
         if (!$good) {
-            $message = new Message(null, null, 'Пожалуйста напишите сколько у вас времени в формате ЧЧ:ММ');
+            $message = new Message(null, null, $messages[0]->body.' не совпадает с форматом ЧЧ:ММ');
             $message->user_id = $messages[0]->user_id;
             $this->done = false;
             $provider->transmit($message);

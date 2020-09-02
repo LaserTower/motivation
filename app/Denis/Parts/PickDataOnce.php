@@ -44,9 +44,15 @@ class PickDataOnce extends CorePart
     {
         $mess = [];
         foreach ($messages as $message) {
-            if ($message instanceof Message) {
-                $mess[] = $message->body;
+            if (!($message instanceof Message)) {
+               continue;
             }
+            
+            if ($message->date < $conversation->updated_at->format('U')) {
+                continue;
+            }
+            
+            $mess[] = $message->body;
         }
         if (count($mess) < 1) {
             $this->done = false;

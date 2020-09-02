@@ -12,7 +12,11 @@ trait PickDataTrait
             $this->externalData['pickData'] = 'in_progress';
             return $this->askQuestion($provider, $messages, $conversation);
         }else{
-            return $this->checkAnswer($provider, $messages, $conversation);
+            $res = $this->checkAnswer($provider, $messages, $conversation);
+            if (!$this->done){
+                $this->externalData['pickData'] = 'in_progress';
+            }
+            return $res;
         }
     }
 }
