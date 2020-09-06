@@ -37,16 +37,16 @@ class Prototype extends Model
     protected static function boot()
     {
         parent::boot();
-        static::retrieved(function ($model) {
-            $model->fillParts();
-        });
+       /* static::retrieved(function ($model) {
+           // $model->fillParts();
+        });*/
     }
 
     protected function fillParts()
     {
         $payload = $this->getAttribute('payload');
         foreach ($payload['parts'] as $entity) {
-            $this->parts[] = CorePart::fill($entity);
+            $this->parts[] = CorePart::create($entity);
         }
     }
 

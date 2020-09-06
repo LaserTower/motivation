@@ -5,6 +5,7 @@ namespace App\Denis\Parts;
 
 
 use App\Denis\Models\Conversation;
+use phpDocumentor\Reflection\Types\Self_;
 
 abstract class CorePart
 {
@@ -17,29 +18,29 @@ abstract class CorePart
     public $date;
     public $done = true;
     public $externalData = [];
+    public static $fields = [];
+    
+    protected static $fieldDefault = [
+        'id' ,
+        'type',
+    ];
 
     const BINDINGS = [
         'message-text' => Message::class,
         'call-manager' => CallAManager::class,
         'condition' => Condition::class,
-        'pick-data-program' => PickDataForProgram::class,
-        'pick-data-once' => PickDataOnce::class,
-        'user-choice-once' => UserChoiceOnce::class,
-        'user-choice-program' => UserChoiceForProgram::class,
+        'pick-data' => PickData::class,
+        'user-choice' => UserChoice::class,
         'denis-auth' => Auth::class,
-        'deploy-timers'=> DeployTimers::class,
+        'deploy-timers' => DeployTimers::class,
         'timezone' => TimeZone::class,
+        'attach-program' => AttachProgram::class,
     ];
 
     abstract function execute($provider, $messages,?Conversation $conversation);
-
-    public static function fill($data)
+    
+    public static function getFields()
     {
-        $class = self::BINDINGS[$data['type']];
-        $part = new $class();
-        foreach ($data as $key => $value) {
-            $part->{$key} = $value;
-        }
-        return $part;
+        return array_merge(self::$fieldDefault, static::$fields);    
     }
 }

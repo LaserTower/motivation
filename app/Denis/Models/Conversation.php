@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $prototype_id
  * @property string $provider
  * @property int $user_id
+ * @property int $user_of_provider_id
+ * @property int $parent_schedule_id
  * @property array $payload
  */
 class Conversation extends Model
@@ -48,6 +50,20 @@ class Conversation extends Model
     {
         $uop = UserOfProviders::find($this->user_of_provider_id);
         return $uop->getVariables();
+    }
+
+    public function getVariable($name)
+    {
+        $variables = $this->getVariables();
+        $test = null;
+        if (array_key_exists($name, $variables['many'])) {
+            $test = end($variables['many'][$name]);
+        }
+
+        if (array_key_exists($name, $variables['once'])) {
+            $test = $variables['once'][$name];
+        }
+        return $test;
     }
 
     public function playerConnect(UserCard $userCard)

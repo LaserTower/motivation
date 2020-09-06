@@ -1,51 +1,36 @@
 <?php
 
-
 namespace App\Denis\Parts;
 
-
-class TimeZone extends UserChoiceOnce
+class TimeZone extends CorePart
 {
-    use PickDataTrait;
-
     public $type = 'timezone';
+    public $variable;
+    public $next;
+    public $error_next_id;
+    public $once = true;
 
-    public function checkAnswer($provider, $messages, $conversation)
+    public static $fields = [
+        'variable',
+        'error_next_id',
+        'next',
+    ];
+    
+    public function execute($provider, $message, $conversation)
     {
-        if ($messages[0] instanceof EmptyPart) {
-            $this->done = false;
-            return null;
-        }
-
-        $good = preg_match('#(?<user_hour>\d{1,2}):(?<user_minute>\d{1,2})#', $messages[0]->body, $matches);
-        
         $currentTime = new \DateTime();
-
-        if (!$good) {
-            $message = new Message(null, null, $messages[0]->body.' не совпадает с форматом ЧЧ:ММ');
-            $message->user_id = $messages[0]->user_id;
-            $this->done = false;
-            $provider->transmit($message);
-            return null;
+        
+        if ($currentTime->format('i') == 00) {
+            return $this->error_next_id;
         }
-
-        if ($matches['user_minute'] == 59 or $currentTime->format('i') == 00) {
-            $message = new Message(null, null, 'Я боюсь ошибиться, пожалуйста напишите через минуту ещё раз напишите мне сколько времени');
-            $message->user_id = $messages[0]->user_id;
-            $this->done = false;
-            $provider->transmit($message);
-            return null;
-        }
+        
+        $test = $conversation->getVariable($this->variable);
+        preg_match('#(?<user_hour>\d{1,2}):(?<user_minute>\d{1,2})#', $test, $matches);
         $utc = $currentTime->format('H');
         $ct = $matches['user_hour'];
         $offset = (24 - $utc + $ct) % 24;
+        $conversation->saveVariable($this->variable, $offset, $this->once);
         
-        $message = new Message(null, null, 'определил смещение как +' . $offset);
-        $message->user_id = $messages[0]->user_id;
-        $this->done = true;
-        $provider->transmit($message);
-        
-        $this->savePartVariable($conversation, 'timezone', $offset);
         return $this->next;
     }
 }

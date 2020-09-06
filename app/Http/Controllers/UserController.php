@@ -12,7 +12,6 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $model = new UserOfProviders();
-        return $model->get();
+        return  UserOfProviders::select('id','provider','provider_user_id')->get();
     }
 }
