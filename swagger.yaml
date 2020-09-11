@@ -104,6 +104,15 @@ paths:
   /users_of_providers/{users_of_providersId}/motivation_program:
     post: 
       summary: Список присоединенных программ к игроку
+      parameters:
+        - name: users_of_providersId
+          in: path
+          required: true
+          description: Номер игрока
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
       responses:
         '200':    # status code
           description: OK
