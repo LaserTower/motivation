@@ -1,24 +1,24 @@
 openapi: 3.0.0
 info:
-  title: Sample API
-  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  title: ЗавтраЗавр API
+  description: Для презентации Дмитрию
   version: 0.1.9
 servers:
   - url: http://lasertower.tech/api
-    description: Точка входа, пока без авторизации
+    description: Точка входа
   - url: http://localhost/api
-    description: Точка входа, пока без авторизации
+    description: Точка входа
 
 paths:
   /scenario:
     get:
       summary: Список сценариев
-      description: Сценарии состоят из блоков
       responses:
         '200':    # status code
           description: OK
     post:
       summary: Добавить новый сценарий
+      description: Сценарии состоят из блоков, для их описания есть отдельный роут
       requestBody:
         required: true
         content:
@@ -28,10 +28,9 @@ paths:
       responses:
         '201':
           description: Created
-
   /scenario/{scenarioId}:
     get:
-      summary: Крнкретный сценарий
+      summary: Отобразить конкретный сценарий
       description: Список блоков сценария
       parameters:
         - name: scenarioId
@@ -45,9 +44,26 @@ paths:
       responses:
         '200':
           description: OK
-          
-
-     
+    put:
+      summary: Обновить сценарий
+      parameters:
+        - name: scenarioId
+          in: path
+          required: true
+          description: Номер сценария
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Scenario'
+      responses:
+        '201':
+          description: Created
   /motivation_program:
     get:
       summary: Список программ мотивации
@@ -55,9 +71,20 @@ paths:
       responses:
         '200':    # status code
           description: OK
+    post:
+      summary: Создать новую программу
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/motivationProgram'
+      responses:
+        '200':    # status code
+          description: OK
   /motivation_program/{programId}:
     get:
-      summary: Крнкретная программа мотивации
+      summary: Отобразить конкретную программу мотивации
       description: Список будильников
       parameters:
         - name: programId
@@ -71,22 +98,27 @@ paths:
       responses:
         '200':
           description: OK
-  /part:
-    get:
-      summary: Описание частей сценария
-      description: Ключи - типы блоков, значение - список полей 
+    put:
+      summary: Обновить программу
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/motivationProgram'
       responses:
         '200':    # status code
           description: OK
   /users_of_providers:
     get:
-      summary: Список игроков 
+      summary: Список игроков
       responses:
         '200':    # status code
           description: OK
+
   /users_of_providers/{users_of_providersId}:
     get:
-      summary: Конкретный игрок
+      summary: Отобразить конкретного игрока
       description: ответы на вопросы
       parameters:
         - name: users_of_providersId
@@ -100,10 +132,9 @@ paths:
       responses:
         '200':
           description: OK
-          
   /users_of_providers/{users_of_providersId}/motivation_program:
-    post: 
-      summary: Список присоединенных программ к игроку
+    get:
+      summary: Список присоединенных к игроку программ
       parameters:
         - name: users_of_providersId
           in: path
@@ -116,16 +147,87 @@ paths:
       responses:
         '200':    # status code
           description: OK
-          
+  /users_of_providers/attach_program:
+    post:
+      summary: Присоединить программу к игроку
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attach'
+      responses:
+        '200':    # status code
+          description: OK
+  /part:
+    get:
+      summary: Описание частей сценария
+      description: Ключи - типы блоков, значение - список полей
+      responses:
+        '200':    # status code
+          description: OK
+
 components:
   schemas:
+    motivationProgram:
+      type: object
+      properties:
+        name:
+          type: string
+        scenarioId:
+          type: integer
+        timers:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              type:
+                type: string
+              scenarioId:
+                type: integer
+              interval:
+                type: string
+              base:
+                type: string
+          example:
+            - id: 1
+              type: relative-base
+              scenarioId: 7
+              interval: -2 hour
+              base: planning_sleep_time
+            - id: 2
+              type: relative-base
+              scenarioId: 8
+              interval: -2 hour
+              base: planning_sleep_time
+      required:
+        - name
+        - scenarioId
+        - timers
     Scenario:
       type: object
       properties:
         name:
           type: string
         parts:
-          type: string
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
       required:
         - name
         - parts
+    Attach:
+      type: object
+      properties:
+        playerId:
+          type: integer
+        programId:
+          type: integer
+      required:
+        - playerId
+        - programId
