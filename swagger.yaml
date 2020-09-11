@@ -1,0 +1,122 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  version: 0.1.9
+servers:
+  - url: http://lasertower.tech/api
+    description: Точка входа, пока без авторизации
+  - url: http://localhost/api
+    description: Точка входа, пока без авторизации
+
+paths:
+  /scenario:
+    get:
+      summary: Список сценариев
+      description: Сценарии состоят из блоков
+      responses:
+        '200':    # status code
+          description: OK
+    post:
+      summary: Добавить новый сценарий
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Scenario'
+      responses:
+        '201':
+          description: Created
+
+  /scenario/{scenarioId}:
+    get:
+      summary: Крнкретный сценарий
+      description: Список блоков сценария
+      parameters:
+        - name: scenarioId
+          in: path
+          required: true
+          description: Номер сценария
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+          
+
+     
+  /motivation_program:
+    get:
+      summary: Список программ мотивации
+      description: Программы состоят из будильников
+      responses:
+        '200':    # status code
+          description: OK
+  /motivation_program/{programId}:
+    get:
+      summary: Крнкретная программа мотивации
+      description: Список будильников
+      parameters:
+        - name: programId
+          in: path
+          required: true
+          description: Номер программы
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+  /part:
+    get:
+      summary: Описание частей сценария
+      description: Ключи - типы блоков, значение - список полей 
+      responses:
+        '200':    # status code
+          description: OK
+  /users_of_providers:
+    get:
+      summary: Список игроков 
+      responses:
+        '200':    # status code
+          description: OK
+  /users_of_providers/{users_of_providersId}:
+    get:
+      summary: Конкретный игрок
+      description: ответы на вопросы
+      parameters:
+        - name: users_of_providersId
+          in: path
+          required: true
+          description: Номер игрока
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+          
+  /users_of_providers/{users_of_providersId}/motivation_program:
+    post: 
+      summary: Список присоединенных программ к игроку
+      responses:
+        '200':    # status code
+          description: OK
+          
+components:
+  schemas:
+    Scenario:
+      type: object
+      properties:
+        name:
+          type: string
+        parts:
+          type: string
+      required:
+        - name
+        - parts

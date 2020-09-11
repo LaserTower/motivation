@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('improve_program', 'ImproveProgram');
-Route::resource('bot_prototype', 'BotPrototype');
+Route::resource('scenario', 'BotPrototype');
 Route::post('improve_program/attach', 'ImproveProgram@attach');
 Route::get('users_of_providers/index', 'PlayerController@index');
 Route::get('users_of_providers/{id}/motivation_program', 'PlayerController@motivationSchedule');

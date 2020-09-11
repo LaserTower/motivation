@@ -149,6 +149,14 @@ services:
     image: dpage/pgadmin4
     networks:
       - app-network
+  swagger:
+    image: swaggerapi/swagger-ui:v3.33.0
+    volumes:
+      - /apps/leash/swagger.yaml:/apps/leash/swagger.yaml
+    ports:
+      - '18004:8080'
+    environment:
+      SWAGGER_JSON: /apps/leash/swagger.yaml
 
 #Docker Networks
 networks:
