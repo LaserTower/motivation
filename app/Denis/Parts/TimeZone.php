@@ -14,6 +14,7 @@ class TimeZone extends CorePart
         'variable',
         'error_next_id',
         'next',
+        'once',
     ];
     
     public function execute($provider, $message, $conversation)
@@ -25,7 +26,10 @@ class TimeZone extends CorePart
         }
         
         $test = $conversation->getVariable($this->variable);
-        preg_match('#(?<user_hour>\d{1,2}):(?<user_minute>\d{1,2})#', $test, $matches);
+        $good = preg_match('#(?<user_hour>\d{1,2}):(?<user_minute>\d{1,2})#', $test, $matches);
+        if(! $good){
+            return $this->error_next_id;
+        }
         $utc = $currentTime->format('H');
         $ct = $matches['user_hour'];
         $offset = (24 - $utc + $ct) % 24;

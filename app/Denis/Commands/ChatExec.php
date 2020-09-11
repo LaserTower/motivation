@@ -42,7 +42,7 @@ class ChatExec extends SimpleConsumer
        
         $conversation = Conversation::find($data['conversation_id']);
         if (is_null($conversation)) {
-            return true;
+            return $msg->get('channel')->basic_ack($msg->get('delivery_tag'));
         }
         $userOfProvider = UserOfProviders::find($conversation->user_of_provider_id);
         $messages = [];

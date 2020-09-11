@@ -43,4 +43,22 @@ abstract class CorePart
     {
         return array_merge(self::$fieldDefault, static::$fields);    
     }
+
+    public static function create($data)
+    {
+        $class = self::BINDINGS[$data['type']];
+        $part = new $class();
+        $part->fill($data);
+        return $part;
+    }
+
+    public  function fill($data)
+    {
+        foreach (static::getFields() as $name) {
+            if(!isset($data[$name])){
+                continue;
+            }
+            $this->{$name} = $data[$name];
+        }
+    }
 }

@@ -12,10 +12,8 @@ use App\VKProvider\Parts\PickData;
 class VkProvider
 {
     const BINDINGS = [
-        'user-choice-once' => UserChoice::class,
-        'user-choice-program' => UserChoice::class,
-        'pick-data-once' => PickData::class,
-        'pick-data-program' => PickData::class,
+        'user-choice' => UserChoice::class,
+        'pick-data' => PickData::class,
         'message-text' => Message::class,
         'call-manager' => CallAManager::class,
         'timezone' => PickData::class,

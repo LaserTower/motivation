@@ -16,13 +16,12 @@ class BotPrototype extends Controller
     
     public function store(Request $request)
     {
-        $parts = $request->all('parts');
         Prototype::create(
             [
                 'name' => $request->get('name'),
                 'published' => true,
                 'payload' => [
-                    'parts' => $parts
+                    'parts' =>  $request->get('parts')
                 ]
             ]);
     }
@@ -31,13 +30,24 @@ class BotPrototype extends Controller
     {
         return Prototype::find($id);
     }
-    
+
     public function parts(Request $request)
     {
         $out = [];
-        foreach (CorePart::BINDINGS as $type=>$class){
-            $out[$type]=$class::getFields();
+        foreach (CorePart::BINDINGS as $type => $class) {
+            $out[$type] = array_flip($class::getFields());
+            $out[$type]['type'] = $type;
         }
         return $out;
+    }
+    
+    public function update($id, Request $request)
+    {
+        Prototype::find($id)->update([
+            'name' => $request->get('name'),
+            'payload' => [
+                'parts' => $request->get('parts')
+            ]
+        ]);
     }
 }

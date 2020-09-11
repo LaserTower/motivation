@@ -33,7 +33,10 @@ class MessageNew
             //сообщение от группы
             return null;
         }
-        $message = new Message(0, 0, $this->text);
+        $message = Message::create([
+            'body'=>$this->text,
+            'type'=>'message-text'
+        ]);
         $message->from = 'user';
         $message->date = $this->date;
         $message->user_id = $this->from_id;

@@ -52,11 +52,13 @@ class Prototype extends Model
 
     public function getPart($id)
     {
+        if(empty($this->parts)){
+            $this->fillParts();
+        }
         foreach ($this->parts as $part) {
             if ($part->id == $id) {
                 return $part;
             }
         }
     }
-
 }

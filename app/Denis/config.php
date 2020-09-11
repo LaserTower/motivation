@@ -1,4 +1,4 @@
 <?php
 return [
-    'default_prototype_id'=>['vk'=>1]
+    'default_prototype_id'=>['vk'=>14]
 ];

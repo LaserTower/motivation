@@ -6,6 +6,8 @@ namespace App\Denis\Parts;
 
 class PickData extends CorePart
 {
+    use ApplyVariables;
+    
     public $type = 'pick-data';
     public $question;
     public $next;
@@ -66,10 +68,10 @@ class PickData extends CorePart
         
         $text = implode(' ', $mess);
         
-        if(!empty($this->regexp)){
-            $good = preg_match($this->regexp, $text, $matches);
+        if(!empty($this->regexp_pattern)){
+            $good = preg_match($this->regexp_pattern, $text, $matches);
             if (!$good){
-                $this->repeatQuestion($provider,$mess[0]->user_id, $conversation);
+                $this->repeatQuestion($provider,$messages[0]->user_id, $conversation);
                 $this->done = false;
                 return null;
             }

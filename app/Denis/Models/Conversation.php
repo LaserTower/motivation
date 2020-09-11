@@ -40,10 +40,10 @@ class Conversation extends Model
         'part_external_data' => 'array',
     ];
 
-    public function saveVariable($key, $value, $many = false)
+    public function saveVariable($key, $value, $once = true)
     {
         $uop = UserOfProviders::find($this->user_of_provider_id);
-        $uop->saveVariable($key, $value, $many);
+        $uop->saveVariable($key, $value, $once);
     }
 
     public function getVariables()
