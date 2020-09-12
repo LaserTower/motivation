@@ -13,7 +13,12 @@ class PlayerController extends Controller
 {
     public function index(Request $request)
     {
-        return  UserOfProviders::select('id','provider','provider_user_id','"аноним"as name')->get();
+        return  UserOfProviders::select('id','provider','provider_user_id AS provider_player_id')->get();
+    }
+    
+    public function show($id,Request $request)
+    {
+        return  UserOfProviders::select('id','provider','provider_user_id AS provider_player_id','variables')->find($id);
     }
 
     public function motivationSchedule($id)

@@ -118,19 +118,19 @@ paths:
       responses:
         '200':    # status code
           description: OK
-  /users_of_providers:
+  /players_of_providers:
     get:
       summary: Список игроков
       responses:
         '200':    # status code
           description: OK
 
-  /users_of_providers/{users_of_providersId}:
+  /players_of_providers/{players_of_providersId}:
     get:
       summary: Отобразить конкретного игрока
       description: ответы на вопросы
       parameters:
-        - name: users_of_providersId
+        - name: players_of_providersId
           in: path
           required: true
           description: Номер игрока
@@ -141,11 +141,11 @@ paths:
       responses:
         '200':
           description: OK
-  /users_of_providers/{users_of_providersId}/motivation_program:
+  /players_of_providers/{players_of_providersId}/motivation_program:
     get:
       summary: Список присоединенных к игроку программ
       parameters:
-        - name: users_of_providersId
+        - name: players_of_providersId
           in: path
           required: true
           description: Номер игрока
@@ -156,7 +156,7 @@ paths:
       responses:
         '200':    # status code
           description: OK
-  /users_of_providers/attach_program:
+  /players_of_providers/attach_program:
     post:
       summary: Присоединить программу к игроку
       requestBody:
@@ -183,7 +183,7 @@ components:
       properties:
         name:
           type: string
-        scenarioId:
+        settingsScenarioId:
           type: integer
         timers:
           type: array

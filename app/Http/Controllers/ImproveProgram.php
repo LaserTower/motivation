@@ -21,7 +21,7 @@ class ImproveProgram extends Controller
         ImproveProgramPrototype::create(
             [
                 'name' => $request->get('name'),
-                'settings_bot_id' => $request->get('settings_bot_id'),
+                'settings_bot_id' => $request->get('settingsScenarioId'),
                 'payload' => [
                     'timers' => $request->get('timers')
                 ]
@@ -33,7 +33,7 @@ class ImproveProgram extends Controller
         ImproveProgramPrototype::find($id)
             ->update([
                 'name' => $request->get('name'),
-                'settings_bot_id' => $request->get('settings_bot_id'),
+                'settings_bot_id' => $request->get('settingsScenarioId'),
                 'payload' => [
                     'timers' => $request->get('timers')
                 ]
@@ -42,8 +42,8 @@ class ImproveProgram extends Controller
 
     public function attach(Request $request)
     {
-        $users_of_providers_id = $request->input('user');
-        $alarm_clock_prototype_id = $request->input('program');
+        $users_of_providers_id = $request->input('playerId');
+        $alarm_clock_prototype_id = $request->input('programId');
         (new Vadim())->attachAlarmsToUserProvider($users_of_providers_id, $alarm_clock_prototype_id);
     }
     

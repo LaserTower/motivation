@@ -14,7 +14,6 @@ class TimeZone extends CorePart
         'variable',
         'error_next_id',
         'next',
-        'once',
     ];
     
     public function execute($provider, $message, $conversation)

@@ -35,8 +35,7 @@ class BotPrototype extends Controller
     {
         $out = [];
         foreach (CorePart::BINDINGS as $type => $class) {
-            $out[$type] = array_flip($class::getFields());
-            $out[$type]['type'] = $type;
+            $out[$type] = $class::getFields();
         }
         return $out;
     }
