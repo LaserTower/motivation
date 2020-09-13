@@ -3,7 +3,7 @@
 namespace App\Vadim\Commands;
 
 
-use App\Vadim\Models\ImproveProgramPrototype;
+use App\Vadim\Models\ProgramScenario;
 
 use App\Vadim\Parts\TimerRelativeBase;
 use Illuminate\Console\Command;
@@ -38,7 +38,7 @@ class ClockPrototype extends Command
           new TimerRelativeBase(3,6,'planning_sleep_time','-30 min'),
         ];
         
-        ImproveProgramPrototype::create(
+        ProgramScenario::create(
             [
                 'name' => 'Бессонница',
                 'settings_bot_id' => 3,

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AlarmClockSchedule extends Model
 {
-    protected $table = 'alarm_clock_schedule';
+    protected $table = 'players_program';
     
     protected $fillable = [
         'users_of_providers_id',

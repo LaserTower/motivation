@@ -7,7 +7,7 @@ use App\Denis\Core;
 use App\Denis\Models\Conversation;
 use App\Models\UserOfProviders;
 use App\Vadim\Models\AlarmClockPool;
-use App\Vadim\Models\ImproveProgramPrototype;
+use App\Vadim\Models\ProgramScenario;
 use App\Vadim\Models\AlarmClockSchedule;
 use App\Vadim\Parts\TimerRelativeBase;
 use Illuminate\Support\Facades\DB;
@@ -45,7 +45,7 @@ class Vadim
     public function deployTimers($alarm_clock_schedule_id)
     {
         $scheduler = AlarmClockSchedule::find($alarm_clock_schedule_id);
-        $prototype = ImproveProgramPrototype::find($scheduler->alarm_clock_prototype_id);
+        $prototype = ProgramScenario::find($scheduler->alarm_clock_prototype_id);
         $timers = [];
         foreach ($prototype->payload['timers'] as $raw) {
             $timers[] = $this->gyrate($raw);
@@ -67,7 +67,7 @@ class Vadim
     {
         $clockTimer = AlarmClockPool::find($alarm_clock_pool_id);
         $schedulerModel = AlarmClockSchedule::find($clockTimer->alarm_clock_schedule_id);
-        $clockPrototype = ImproveProgramPrototype::find($schedulerModel->alarm_clock_prototype_id);
+        $clockPrototype = ProgramScenario::find($schedulerModel->alarm_clock_prototype_id);
         $userOfProvidersModel = UserOfProviders::find($schedulerModel->users_of_providers_id);
 
         $attached = false;

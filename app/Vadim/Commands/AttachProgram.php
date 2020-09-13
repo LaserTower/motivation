@@ -3,7 +3,7 @@
 namespace App\Vadim\Commands;
 
 
-use App\Vadim\Models\ImproveProgramPrototype;
+use App\Vadim\Models\ProgramScenario;
 
 use App\Vadim\Parts\TimerRelativeBase;
 use App\Vadim\Vadim;

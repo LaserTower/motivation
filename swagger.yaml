@@ -10,7 +10,7 @@ servers:
     description: Точка входа
 
 paths:
-  /scenario:
+  /conversation_scenario:
     get:
       summary: Список сценариев
       responses:
@@ -28,7 +28,7 @@ paths:
       responses:
         '201':
           description: Created
-  /scenario/{scenarioId}:
+  /conversation_scenario/{scenarioId}:
     get:
       summary: Отобразить конкретный сценарий
       description: Список блоков сценария

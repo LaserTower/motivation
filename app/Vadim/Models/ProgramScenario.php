@@ -6,9 +6,9 @@ namespace App\Vadim\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ImproveProgramPrototype extends Model
+class ProgramScenario extends Model
 {
-    protected $table = 'improve_program_prototypes';
+    protected $table = 'program_scenario';
 
     protected $fillable = [
         'name',

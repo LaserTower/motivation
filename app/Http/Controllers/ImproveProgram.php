@@ -4,7 +4,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Vadim\Models\ImproveProgramPrototype;
+use App\Vadim\Models\ProgramScenario;
 use App\Vadim\Parts\TimerRelativeBase;
 use App\Vadim\Vadim;
 use Illuminate\Http\Request;
@@ -13,12 +13,12 @@ class ImproveProgram extends Controller
 {
     public function index(Request $request)
     {
-        return ImproveProgramPrototype::select('id', 'name', 'settings_bot_id', 'created_at')->get();
+        return ProgramScenario::select('id', 'name', 'settings_bot_id', 'created_at')->get();
     }
 
     public function store(Request $request)
     {
-        ImproveProgramPrototype::create(
+        ProgramScenario::create(
             [
                 'name' => $request->get('name'),
                 'settings_bot_id' => $request->get('settingsScenarioId'),
@@ -30,7 +30,7 @@ class ImproveProgram extends Controller
 
     public function update($id, Request $request)
     {
-        ImproveProgramPrototype::find($id)
+        ProgramScenario::find($id)
             ->update([
                 'name' => $request->get('name'),
                 'settings_bot_id' => $request->get('settingsScenarioId'),
@@ -49,6 +49,6 @@ class ImproveProgram extends Controller
     
     public function show($id)
     {
-        return ImproveProgramPrototype::find($id);
+        return ProgramScenario::find($id);
     }
 }

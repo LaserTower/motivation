@@ -13,7 +13,7 @@ class AlarmClock extends Migration
      */
     public function up()
     {
-        Schema::create('alarm_clock_schedule', function (Blueprint $table) {
+        Schema::create('players_program', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('users_of_providers_id')->nullable();
             $table->integer('alarm_clock_prototype_id');
@@ -30,6 +30,6 @@ class AlarmClock extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('alarm_clock');
+        Schema::dropIfExists('players_program');
     }
 }

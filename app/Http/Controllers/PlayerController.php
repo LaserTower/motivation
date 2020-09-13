@@ -24,11 +24,11 @@ class PlayerController extends Controller
     public function motivationSchedule($id)
     {
         return AlarmClockSchedule::select(
-            'alarm_clock_schedule.id',
-            'alarm_clock_schedule.alarm_clock_prototype_id as motivation_scenario_id',
-            'improve_program_prototypes.name'
+            'players_program.id',
+            'players_program.alarm_clock_prototype_id as motivation_scenario_id',
+            'program_scenario.name'
         )
-            ->leftJoin('improve_program_prototypes', 'alarm_clock_schedule.alarm_clock_prototype_id', '=', 'improve_program_prototypes.id')
+            ->leftJoin('program_scenario', 'players_program.alarm_clock_prototype_id', '=', 'program_scenario.id')
             ->where('users_of_providers_id', $id)
             ->get();
     }
