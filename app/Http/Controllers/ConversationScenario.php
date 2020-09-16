@@ -24,7 +24,7 @@ class ConversationScenario extends Controller
                     'parts' =>  $request->get('parts')
                 ]
             ]);
-        return ['id' => $scenario];
+        return ['id' => $scenario->id];
     }
     
     public function show($id)
