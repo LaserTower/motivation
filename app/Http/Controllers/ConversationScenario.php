@@ -7,7 +7,7 @@ use App\Denis\Models\Prototype;
 use App\Denis\Parts\CorePart;
 use Illuminate\Http\Request;
 
-class BotPrototype extends Controller
+class ConversationScenario extends Controller
 {
     public function index(Request $request)
     {
@@ -16,7 +16,7 @@ class BotPrototype extends Controller
     
     public function store(Request $request)
     {
-        Prototype::create(
+        $scenario = Prototype::create(
             [
                 'name' => $request->get('name'),
                 'published' => true,
@@ -24,6 +24,7 @@ class BotPrototype extends Controller
                     'parts' =>  $request->get('parts')
                 ]
             ]);
+        return ['id' => $scenario];
     }
     
     public function show($id)
