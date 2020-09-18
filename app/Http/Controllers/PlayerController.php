@@ -13,7 +13,13 @@ class PlayerController extends Controller
 {
     public function index(Request $request)
     {
-        return  UserOfProviders::select('id','provider','provider_user_id AS provider_player_id')->get();
+        $players = UserOfProviders::select('id','provider','provider_user_id AS provider_player_id')->get()->toArray();
+
+        foreach ($players as $k => $v){
+            $players[$k]['programs']=AlarmClockSchedule::join('program_scenario', 'program_scenario.id', '=', 'players_program.alarm_clock_prototype_id')
+            ->where('players_program.users_of_providers_id',$v['id'])->select('program_scenario.id','program_scenario.name')->get();
+        }
+        return $players;
     }
     
     public function show($id,Request $request)
