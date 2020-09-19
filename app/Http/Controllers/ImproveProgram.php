@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Denis\Models\Prototype;
 use App\Vadim\Models\ProgramScenario;
 use App\Vadim\Parts\TimerRelativeBase;
 use App\Vadim\Vadim;
@@ -46,9 +47,22 @@ class ImproveProgram extends Controller
         $alarm_clock_prototype_id = $request->input('programId');
         (new Vadim())->attachAlarmsToUserProvider($users_of_providers_id, $alarm_clock_prototype_id);
     }
-    
+
     public function show($id)
     {
-        return ProgramScenario::find($id);
+        $program = ProgramScenario::find($id)->toArray();
+        $payload = $program['payload'];
+        unset($program['payload']);
+        $ids = [];
+        foreach ($payload['timers'] as $timer) {
+            $ids[] = $timer['scenarioId'];
+        }
+        $scenario = Prototype::whereIn('id', $ids)->select('id', 'name')->get()->keyBy('id');
+
+        foreach ($payload['timers'] as $timer) {
+            $timer['name'] = $scenario[$timer['scenarioId']]['name'];
+            $program['timers'][] = $timer;
+        }
+        return $program;
     }
 }
