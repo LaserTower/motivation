@@ -157,6 +157,10 @@ services:
       - '18004:8080'
     environment:
       SWAGGER_JSON: /apps/leash/swagger.yaml
+  node:
+    image: node
+    volumes:
+      - ../../../constructor:/apps/leash/constructor
 
 #Docker Networks
 networks:
