@@ -34,7 +34,7 @@ class ImproveProgram extends Controller
         ProgramScenario::find($id)
             ->update([
                 'name' => $request->get('name'),
-                'settings_bot_id' => $request->get('settingsScenarioId'),
+                'settings_scenario_id' => $request->get('settingsScenarioId'),
                 'payload' => [
                     'timers' => $request->get('timers')
                 ]
