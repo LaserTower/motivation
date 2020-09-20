@@ -4,7 +4,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Denis\Models\Prototype;
+use App\Denis\Models\ConversationsScenario;
 use App\Vadim\Models\ProgramScenario;
 use App\Vadim\Parts\TimerRelativeBase;
 use App\Vadim\Vadim;
@@ -14,7 +14,7 @@ class ImproveProgram extends Controller
 {
     public function index(Request $request)
     {
-        return ProgramScenario::select('id', 'name', 'settings_bot_id', 'created_at')->get();
+        return ProgramScenario::select('id', 'name', 'settings_scenario_id as settings_bot_id', 'created_at')->get();
     }
 
     public function store(Request $request)
@@ -22,7 +22,7 @@ class ImproveProgram extends Controller
         ProgramScenario::create(
             [
                 'name' => $request->get('name'),
-                'settings_bot_id' => $request->get('settingsScenarioId'),
+                'settings_scenario_id' => $request->get('settingsScenarioId'),
                 'payload' => [
                     'timers' => $request->get('timers')
                 ]
@@ -57,7 +57,7 @@ class ImproveProgram extends Controller
         foreach ($payload['timers'] as $timer) {
             $ids[] = $timer['scenarioId'];
         }
-        $scenario = Prototype::whereIn('id', $ids)->select('id', 'name')->get()->keyBy('id');
+        $scenario = ConversationsScenario::whereIn('id', $ids)->select('id', 'name')->get()->keyBy('id');
 
         foreach ($payload['timers'] as $timer) {
             $timer['name'] = $scenario[$timer['scenarioId']]['name'];

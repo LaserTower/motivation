@@ -6,7 +6,7 @@ namespace App\Denis;
 
 use App\Denis\Models\Conversation;
 use App\Denis\Models\MessagePool;
-use App\Denis\Models\Prototype;
+use App\Denis\Models\ConversationsScenario;
 use App\Denis\Parts\CorePart;
 use App\Denis\Parts\EmptyPart;
 use App\Models\UserOfProviders;
@@ -16,7 +16,7 @@ class Core
 {
     public function receive($provider, $conversation, $message)
     {
-        $prototype = Prototype::find($conversation->prototype_id);
+        $prototype = ConversationsScenario::find($conversation->prototype_id);
 
         $next = $conversation->next_part_id ?? 1;
 

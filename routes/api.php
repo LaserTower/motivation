@@ -24,4 +24,4 @@ Route::resource('players_of_providers', 'PlayerController');
 Route::get('players_of_providers/{id}/motivation_program', 'PlayerController@motivationSchedule');
 Route::post('players_of_providers/attach_program', 'ImproveProgram@attach');
 
-Route::get('part', 'BotPrototype@parts');
+Route::get('part', 'ConversationScenario@parts');

@@ -12,7 +12,7 @@ class ProgramScenario extends Model
 
     protected $fillable = [
         'name',
-        'settings_bot_id',
+        'settings_scenario_id',
         'payload',
     ];
 

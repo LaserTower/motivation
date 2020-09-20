@@ -3,7 +3,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Denis\Models\Prototype;
+use App\Denis\Models\ConversationsScenario;
 use App\Denis\Parts\CorePart;
 use Illuminate\Http\Request;
 
@@ -11,12 +11,12 @@ class ConversationScenario extends Controller
 {
     public function index(Request $request)
     {
-        return Prototype::select('id','name','created_at')->get();
+        return ConversationsScenario::select('id','name','created_at')->get();
     }
     
     public function store(Request $request)
     {
-        $scenario = Prototype::create(
+        $scenario = ConversationsScenario::create(
             [
                 'name' => $request->get('name'),
                 'published' => true,
@@ -29,7 +29,7 @@ class ConversationScenario extends Controller
     
     public function show($id)
     {
-        return Prototype::find($id);
+        return ConversationsScenario::find($id);
     }
 
     public function parts(Request $request)
@@ -43,7 +43,7 @@ class ConversationScenario extends Controller
     
     public function update($id, Request $request)
     {
-        Prototype::find($id)->update([
+        ConversationsScenario::find($id)->update([
             'name' => $request->get('name'),
             'payload' => [
                 'parts' => $request->get('parts')

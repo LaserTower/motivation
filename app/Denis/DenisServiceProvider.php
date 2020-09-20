@@ -9,7 +9,7 @@ use App\Denis\Commands\ChatExec;
 
 use App\Denis\Commands\StartUpConversation;
 use App\Denis\Models\Conversation;
-use App\Denis\Models\Prototype;
+use App\Denis\Models\ConversationsScenario;
 use Illuminate\Support\ServiceProvider;
 
 class DenisServiceProvider extends ServiceProvider
@@ -22,7 +22,7 @@ class DenisServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->alias(Conversation::class, "denis.conversation");
-        $this->app->alias(Prototype::class, "denis.prototype");
+        $this->app->alias(ConversationsScenario::class, "denis.prototype");
         $this->mergeConfigFrom(
             __DIR__.'/config.php', 'denis'
         );

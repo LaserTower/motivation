@@ -8,7 +8,7 @@ use App\Denis\Models\Conversation;
 use App\Models\UserOfProviders;
 use App\Vadim\Models\AlarmClockPool;
 use App\Vadim\Models\ProgramScenario;
-use App\Vadim\Models\AlarmClockSchedule;
+use App\Vadim\Models\PlayersProgram;
 use App\Vadim\Parts\TimerRelativeBase;
 use Illuminate\Support\Facades\DB;
 
@@ -23,7 +23,7 @@ class Vadim
         DB::transaction(function () use ($users_of_providers_id, $alarm_clock_prototype_id) {
             //за пользователем теперь следит бот
             //привязываем прототип программы мотивации к игроку 
-            $scheduler = AlarmClockSchedule::create([
+            $scheduler = PlayersProgram::create([
                 'users_of_providers_id' => $users_of_providers_id,
                 'alarm_clock_prototype_id' => $alarm_clock_prototype_id,
                 'clock_external_data' => ['mode' => 'setup']
@@ -44,7 +44,7 @@ class Vadim
 
     public function deployTimers($alarm_clock_schedule_id)
     {
-        $scheduler = AlarmClockSchedule::find($alarm_clock_schedule_id);
+        $scheduler = PlayersProgram::find($alarm_clock_schedule_id);
         $prototype = ProgramScenario::find($scheduler->alarm_clock_prototype_id);
         $timers = [];
         foreach ($prototype->payload['timers'] as $raw) {
@@ -66,7 +66,7 @@ class Vadim
     public function clockExec($alarm_clock_pool_id)
     {
         $clockTimer = AlarmClockPool::find($alarm_clock_pool_id);
-        $schedulerModel = AlarmClockSchedule::find($clockTimer->alarm_clock_schedule_id);
+        $schedulerModel = PlayersProgram::find($clockTimer->alarm_clock_schedule_id);
         $clockPrototype = ProgramScenario::find($schedulerModel->alarm_clock_prototype_id);
         $userOfProvidersModel = UserOfProviders::find($schedulerModel->users_of_providers_id);
 

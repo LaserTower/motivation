@@ -4,13 +4,13 @@ namespace App\Vadim\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AlarmClockSchedule extends Model
+class PlayersProgram extends Model
 {
     protected $table = 'players_program';
     
     protected $fillable = [
         'users_of_providers_id',
-        'alarm_clock_prototype_id',
+        'program_scenario_id',
         'clock_external_data'
     ];
 

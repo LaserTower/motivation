@@ -16,9 +16,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $updated_at
  * @property string $external_id
  */
-class Prototype extends Model
+class ConversationsScenario extends Model
 {
-    protected $table = 'bot_prototypes';
+    protected $table = 'conversations_scenario';
     protected $parts = [];
     protected $fillable = [
         'name',

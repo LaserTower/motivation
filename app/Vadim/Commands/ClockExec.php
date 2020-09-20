@@ -6,7 +6,7 @@ use App\Core;
 use App\Denis\Parts\Typing;
 use App\MQ\ReconnectRabbitMq;
 use App\Vadim\Models\AlarmClockPool;
-use App\Vadim\Models\AlarmClockSchedule;
+use App\Vadim\Models\PlayersProgram;
 use App\Vadim\Vadim;
 use App\VKProvider\VkProvider;
 use Illuminate\Console\Command;
