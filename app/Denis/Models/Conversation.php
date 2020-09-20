@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Conversation extends Model
 {
-    protected $table = 'bot_conversations';
+    protected $table = 'conversations';
     protected $history = [];
     protected $variables = [];
 
