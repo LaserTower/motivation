@@ -19,7 +19,7 @@ class ImproveProgram extends Controller
 
     public function store(Request $request)
     {
-        ProgramScenario::create(
+        $program = ProgramScenario::create(
             [
                 'name' => $request->get('name'),
                 'settings_scenario_id' => $request->get('settingsScenarioId'),
@@ -27,6 +27,7 @@ class ImproveProgram extends Controller
                     'timers' => $request->get('timers')
                 ]
             ]);
+        return ['id' => $program->id];
     }
 
     public function update($id, Request $request)
