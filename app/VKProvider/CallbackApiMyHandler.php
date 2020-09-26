@@ -18,6 +18,7 @@ class CallbackApiMyHandler extends VKCallbackApiHandler
 
     public function messageNew(int $group_id, ?string $secret, array $object)
     {
+        \Log::info('receive',['message' => $object['text']]);
         $vkMessage = new MessageNew($object);
         $newEntity = $vkMessage->createEntity();
         if(is_null($newEntity)){

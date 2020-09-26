@@ -16,12 +16,12 @@ class Core
 {
     public function receive($provider, $conversation, $message)
     {
-        $prototype = ConversationsScenario::find($conversation->prototype_id);
+        $scenario = ConversationsScenario::find($conversation->scenario_id);
 
         $next = $conversation->next_part_id ?? 1;
 
         do {
-            $part = $prototype->getPart($next);
+            $part = $scenario->getPart($next);
             if ($part->type == 'goto') {
                 //todo переход на другой бот  
             }
@@ -66,7 +66,7 @@ class Core
             $conversation = Conversation::make(
                 [
                     'user_of_provider_id' => $userOfProvidersModel->id,
-                    'prototype_id' => config('denis.default_prototype_id.' . $provider_name)
+                    'scenario_id' => config("denis.$provider_name.doorman_scenario_id")
                 ]);
             $this->attachConversation($userOfProvidersModel, $conversation);
         }
@@ -92,6 +92,7 @@ class Core
         $conversationModel->refresh();
         //это самое первое сообщение
         $userOfProvidersModel->locked_by_conversation_id = $conversationModel->id;
+        $userOfProvidersModel->next_part_id = 1;
         $userOfProvidersModel->save();
         $newEntity = new EmptyPart();
         $newEntity->user_id = $userOfProvidersModel->provider_user_id;
@@ -120,15 +121,15 @@ class Core
     protected function endOfConversation($provider, $conversation)
     {
         //не удалять дефолтный диалог
-        if ($conversation->prototype_id == config('denis.default_prototype_id.' . $provider->name)) {
+        if ($conversation->scenario_id == config("denis.{$provider->name}.doorman_scenario_id")) {
             return;
         }
         $conversation->delete();
 
-        //по окончании мини бота должен переходить на Швейцара
+        //по окончании мини бота должен переходить на сценарий поддержки
 
         $portier = Conversation::where([
-            ['prototype_id', config('denis.default_prototype_id.' . $provider->name)],
+            ['scenario_id', config("denis.{$provider->name}.lifeline_scenario_id") ],
             ['user_of_provider_id', $conversation->user_of_provider_id]
         ])->first();
         $userOfProvidersModel = UserOfProviders::find($portier->user_of_provider_id);

@@ -48,6 +48,7 @@ class UserOfProviders extends Model
 
     public function saveVariable($key, $value, $once)
     {
+        $once = true;
         $var = $this->getAttribute('variables');
         if ($once) {
             $var['once'][$key] = $value;

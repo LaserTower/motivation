@@ -26,10 +26,10 @@ class Conversation extends Model
 
     protected $fillable = [
         'user_of_provider_id',
-        'prototype_id',
+        'scenario_id',
         'next_part_id',
         'part_external_data',
-        'parent_schedule_id',
+        'parent_program_scenario',
     ];
 
     protected $attributes = [

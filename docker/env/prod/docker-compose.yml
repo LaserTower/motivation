@@ -1,0 +1,152 @@
+version: '3'
+services:
+
+  #PHP Service
+  backend:
+    build:
+      context: ../../
+      dockerfile: src/backend/Dockerfile
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    volumes:
+      - ../../../:/apps/leash
+      - ../../../docker/src/backend/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    networks:
+      - app-network
+    links:
+      - bot_db
+
+  bot_rabbitmq:
+      image: rabbitmq
+      networks:
+        - app-network
+
+  consumer-vk:
+    build:
+      context: ../../
+      dockerfile: src/backend/Dockerfile
+    image: sphp
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    volumes:
+      - ../../../:/apps/leash
+      - ../../../docker/src/backend/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    command: php artisan consumer:vk_waitForUserMessage
+    networks:
+      - app-network
+
+  chatbot-round-robin:
+    build:
+      context: ../../
+      dockerfile: src/backend/Dockerfile
+    image: sphp
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    volumes:
+      - ../../../:/apps/leash
+      - ../../../docker/src/backend/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    command: php artisan consumer:RoundRobin
+    networks:
+      - app-network  
+    links:
+      - bot_rabbitmq
+
+  chatbot-exec:
+    build:
+      context: ../../
+      dockerfile: src/backend/Dockerfile
+    image: sphp
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    volumes:
+      - ../../../:/apps/leash
+      - ../../../docker/src/backend/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    command: php artisan consumer:botExec
+    networks:
+      - app-network
+    links:
+      - bot_rabbitmq
+
+  vadim-round-robin:
+    build:
+      context: ../../
+      dockerfile: src/backend/Dockerfile
+    image: sphp
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    volumes:
+      - ../../../:/apps/leash
+      - ../../../docker/src/backend/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    command: php artisan consumer:ClockTimer
+    networks:
+      - app-network
+    links:
+      - bot_rabbitmq
+
+  vadim-exec:
+    build:
+      context: ../../
+      dockerfile: src/backend/Dockerfile
+    image: sphp
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    volumes:
+      - ../../../:/apps/leash
+      - ../../../docker/src/backend/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    command: php artisan consumer:clockExec
+    networks:
+      - app-network
+    links:
+      - bot_rabbitmq
+    
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ../../../constructor:/apps/leash/constructor
+      - ../../../docker/src/frontend/vhost.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - app-network
+    depends_on:
+      - backend
+
+  bot_db:
+    image: postgres:12.2
+    environment:
+      POSTGRES_DB: denis
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: example
+    volumes:
+      - /var/lib/docker-data/leash/postgresql:/var/lib/postgresql/data
+    networks:
+      - app-network
+  
+  swagger:
+    image: swaggerapi/swagger-ui:v3.33.0
+    volumes:
+      - /apps/leash/swagger.yaml:/apps/leash/swagger.yaml
+    ports:
+      - '18004:8080'
+    environment:
+      SWAGGER_JSON: /apps/leash/swagger.yaml
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge

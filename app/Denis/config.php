@@ -1,4 +1,7 @@
 <?php
 return [
-    'default_prototype_id'=>['vk'=>14]
+    'vk' => [
+        'doorman_scenario_id' => 1,
+        'lifeline_scenario_id' => 2,
+    ],
 ];

@@ -39,7 +39,6 @@ class DenisServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->loadMigrationsFrom(__DIR__.'/migrations');
             $this->commands([
-                CreatePrototype::class,
                 RoundRobin::class,
                 ChatExec::class,
                 StartUpConversation::class,

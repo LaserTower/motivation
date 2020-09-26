@@ -17,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stack'),
+    'default' => env('LOG_CHANNEL', 'stderr'),
 
     /*
     |--------------------------------------------------------------------------
@@ -79,6 +79,7 @@ return [
             'with' => [
                 'stream' => 'php://stderr',
             ],
+            'level' => 'debug',
         ],
 
         'syslog' => [

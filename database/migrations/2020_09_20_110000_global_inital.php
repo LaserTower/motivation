@@ -24,7 +24,7 @@ class GlobalInital extends Migration
             $table->timestamp('updated_at', 0)->nullable();
         });
 
-        Schema::create('users_of_providers', function (Blueprint $table) {
+        Schema::create('users_of_providers', function ($table) {
             $table->unsignedBigInteger('id',true);
             $table->integer('provider_user_id');
             $table->text('provider');
