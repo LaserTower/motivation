@@ -34,7 +34,7 @@ class Vadim
             $usersOfProvidersModel = UserOfProviders::find($users_of_providers_id);
             AlarmClockPool::create([
                 'clock_at' => \DB::raw('transaction_timestamp()'),
-                'alarm_clock_schedule_id' => $scheduler->id,
+                'program_scenario_id' => $scheduler->id,
                 'timer_part_id' => 0,
                 'users_of_providers_id' => $users_of_providers_id,
                 'player_id' => $usersOfProvidersModel->player_id,
