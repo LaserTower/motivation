@@ -25,7 +25,7 @@ class Vadim
             //привязываем прототип программы мотивации к игроку 
             $scheduler = PlayersProgram::create([
                 'users_of_providers_id' => $users_of_providers_id,
-                'alarm_clock_prototype_id' => $alarm_clock_prototype_id,
+                'program_scenario_id' => $alarm_clock_prototype_id,
                 'clock_external_data' => ['mode' => 'setup']
             ]);
 
@@ -34,7 +34,7 @@ class Vadim
             $usersOfProvidersModel = UserOfProviders::find($users_of_providers_id);
             AlarmClockPool::create([
                 'clock_at' => \DB::raw('transaction_timestamp()'),
-                'program_scenario_id' => $scheduler->id,
+                'players_program_id' => $scheduler->id,
                 'timer_part_id' => 0,
                 'users_of_providers_id' => $users_of_providers_id,
                 'player_id' => $usersOfProvidersModel->player_id,

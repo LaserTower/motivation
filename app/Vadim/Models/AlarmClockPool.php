@@ -14,7 +14,7 @@ class AlarmClockPool extends Model
     
     protected $fillable = [
         'clock_at',
-        'alarm_clock_schedule_id',
+        'players_program_id',
         'timer_part_id',
         'in_progress',
         'users_of_providers_id',
