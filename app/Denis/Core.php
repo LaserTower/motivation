@@ -92,7 +92,6 @@ class Core
         $conversationModel->refresh();
         //это самое первое сообщение
         $userOfProvidersModel->locked_by_conversation_id = $conversationModel->id;
-        $userOfProvidersModel->next_part_id = 1;
         $userOfProvidersModel->save();
         $newEntity = new EmptyPart();
         $newEntity->user_id = $userOfProvidersModel->provider_user_id;
