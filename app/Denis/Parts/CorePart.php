@@ -5,7 +5,7 @@ namespace App\Denis\Parts;
 
 
 use App\Denis\Models\Conversation;
-use phpDocumentor\Reflection\Types\Self_;
+
 
 abstract class CorePart
 {
@@ -35,6 +35,7 @@ abstract class CorePart
         'deploy-timers' => DeployTimers::class,
         'timezone' => TimeZone::class,
         'attach-program' => AttachProgram::class,
+        'goto' => GoToBot::class,
     ];
 
     abstract function execute($provider, $messages,?Conversation $conversation);

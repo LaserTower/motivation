@@ -23,7 +23,8 @@ class Core
         do {
             $part = $scenario->getPart($next);
             if ($part->type == 'goto') {
-                //todo переход на другой бот  
+                $scenario = ConversationsScenario::find($part->scenario_id);
+                $part = $scenario->getPart($part->next_id);
             }
             $next = $part->execute($provider, $message, $conversation);
             $this->saveEntity($conversation, $part, $next);

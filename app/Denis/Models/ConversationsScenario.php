@@ -33,15 +33,7 @@ class ConversationsScenario extends Model
     protected $casts = [
         'payload' => 'array',
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-       /* static::retrieved(function ($model) {
-           // $model->fillParts();
-        });*/
-    }
-
+    
     protected function fillParts()
     {
         $payload = $this->getAttribute('payload');
