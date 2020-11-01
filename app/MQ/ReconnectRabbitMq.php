@@ -11,7 +11,7 @@ class ReconnectRabbitMq extends AMQPStreamConnection
     protected function connect()
     {
         $start = time();
-        while (!$this->isConnected() && (time()-$start)<15) {
+        while (!$this->isConnected() || (time()-$start)<15) {
             try {
                 parent::connect();
                 if($this->isConnected()){

@@ -43,6 +43,9 @@ HAVING max(created_at)<  transaction_timestamp()- (interval '2 second' +  (max(c
                 $msg = new AMQPMessage(json_encode([
                     'conversation_id' => $row->conversation_id,
                 ]));
+                \Log::info('transmit',[
+                    'conversation_id' => $row->conversation_id,
+                ]);
                 $channel->basic_publish($msg,'','chat_exec');
             }
         }

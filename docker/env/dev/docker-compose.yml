@@ -15,7 +15,7 @@ services:
       - ../../../docker/src/backend/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     networks:
       - app-network
-    links:
+    depends_on:
       - bot_db
 
   bot_rabbitmq:
@@ -40,6 +40,8 @@ services:
     command: php artisan consumer:vk_waitForUserMessage
     networks:
       - app-network
+    depends_on:
+      - bot_db
 
   chatbot-round-robin:
     build:
@@ -56,8 +58,9 @@ services:
     command: php artisan consumer:RoundRobin
     networks:
       - app-network  
-    links:
+    depends_on:
       - bot_rabbitmq
+      - bot_db
 
   chatbot-exec:
     build:
@@ -74,8 +77,9 @@ services:
     command: php artisan consumer:botExec
     networks:
       - app-network
-    links:
+    depends_on:
       - bot_rabbitmq
+      - bot_db
 
   vadim-round-robin:
     build:
@@ -92,8 +96,9 @@ services:
     command: php artisan consumer:ClockTimer
     networks:
       - app-network
-    links:
+    depends_on:
       - bot_rabbitmq
+      - bot_db
 
   vadim-exec:
     build:
@@ -110,8 +115,9 @@ services:
     command: php artisan consumer:clockExec
     networks:
       - app-network
-    links:
+    depends_on:
       - bot_rabbitmq
+      - bot_db
     
   webserver:
     image: nginx:alpine
@@ -149,6 +155,7 @@ services:
     image: dpage/pgadmin4
     networks:
       - app-network
+    
   swagger:
     image: swaggerapi/swagger-ui:v3.33.0
     volumes:

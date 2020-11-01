@@ -32,6 +32,7 @@ class VKWaitForUserMessage extends Command
 
     public function handle()
     {
+        echo " [*] VkProvider ";
         $access_token = env('VK_ACCESS_TOKEN');
         $group_id = env('VK_GROUP_ID');
         $vk = new VKApiClient();
@@ -48,7 +49,9 @@ class VKWaitForUserMessage extends Command
         $wait = 25;
         
         $executor = new VKCallbackApiLongPollExecutor($vk, $access_token, $group_id, new CallbackApiMyHandler(new Core()), $wait);
+        echo " [*] VkProvider ";
         while (true){
+            echo " [*] VkProvider listen ";
             $executor->listen();
         }
     }

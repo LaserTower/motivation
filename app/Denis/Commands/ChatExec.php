@@ -38,6 +38,7 @@ class ChatExec extends SimpleConsumer
     public function consume($msg)
     {
         $data = json_decode($msg->body, 1);
+        \Log::info('botExec', $data);
         $rows = MessagePool::where('conversation_id', $data['conversation_id'])->get();
        
         $conversation = Conversation::find($data['conversation_id']);

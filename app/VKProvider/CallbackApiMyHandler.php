@@ -18,7 +18,7 @@ class CallbackApiMyHandler extends VKCallbackApiHandler
 
     public function messageNew(int $group_id, ?string $secret, array $object)
     {
-        \Log::info('receive',['message' => $object['text']]);
+        print_r($object);
         $vkMessage = new MessageNew($object);
         $newEntity = $vkMessage->createEntity();
         if(is_null($newEntity)){
@@ -38,6 +38,7 @@ class CallbackApiMyHandler extends VKCallbackApiHandler
     }
 
     public function parseObject(int $group_id, ?string $secret, string $type, array $object) {
+        \Log::info('parseObject');
         switch ($type) {
             case 'message_typing_state':
                 $this->messageTypingState($group_id, $secret, $object);
